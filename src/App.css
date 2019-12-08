@@ -24,6 +24,14 @@
   color: white;
 }
 
+#ascii {
+  font-family: "Courier New", "Courier", monospace;
+  font-size: 10px;
+  line-height: 10px;
+  letter-spacing: -1.5px;
+  text-align: center;
+}
+
 .App-link {
   color: #61dafb;
 }
