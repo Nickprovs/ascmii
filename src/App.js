@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import vid from "./media/video.mp4";
-import vid2 from "./media/video2.mp4";
 
 //Flow
 //Get camera stream from WebRtc
