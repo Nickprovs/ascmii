@@ -55,10 +55,17 @@ class App extends Component {
       this.canvas.width,
       this.canvas.height
     );
+    console.log("Desired Coereced");
+    console.log("width", width);
+    console.log("height", height);
 
     this.canvas
       .getContext("2d")
       .drawImage(this.videoPlayer, 0, 0, width, height);
+
+    console.log("Reality");
+    console.log("width", width);
+    console.log("height", height);
 
     const canvasContext = this.canvas.getContext("2d");
     const rawAscii = this.getAsciiCharactersFromCanvasContext(
@@ -66,8 +73,6 @@ class App extends Component {
       width,
       height
     );
-
-    console.log(rawAscii);
     this.setState({ asciiText: rawAscii });
   }
 
@@ -127,7 +132,8 @@ class App extends Component {
           Math.round(brightness * (this.characters.length - 1))
       ];
 
-      if ((i + 1) % width === 0) {
+      if ((i + 4) % width === 0) {
+        console.log("breaking at", i / 4);
         nextCharacter += "\n";
       }
 
@@ -152,7 +158,7 @@ class App extends Component {
   }
 
   clampDimensions(width, height) {
-    const MAXIMUM_WIDTH = 80;
+    const MAXIMUM_WIDTH = 72;
     const MAXIMUM_HEIGHT = 50;
 
     if (height > MAXIMUM_HEIGHT) {
