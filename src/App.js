@@ -51,10 +51,14 @@ class App extends Component {
   }
 
   handleSnapshotClick() {
-    const [width, height] = this.clampDimensions(
-      this.canvas.width,
-      this.canvas.height
-    );
+    // const [width, height] = this.clampDimensions(
+    //   this.canvas.width,
+    //   this.canvas.height
+    // );
+
+    let width = 144;
+    let height = 100;
+
     console.log("Desired Coereced");
     console.log("width", width);
     console.log("height", height);
@@ -132,8 +136,9 @@ class App extends Component {
           Math.round(brightness * (this.characters.length - 1))
       ];
 
-      if ((i + 4) % width === 0) {
-        console.log("breaking at", i / 4);
+      const pixelNum = Math.ceil((i + 1) / 4);
+      if (i !== 0 && pixelNum % width === 0) {
+        console.log("breaking at", pixelNum);
         nextCharacter += "\n";
       }
 
