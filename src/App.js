@@ -9,6 +9,19 @@ import "./App.css";
 //Loop through that image's canvas data and build a formatted image-like ascii string
 //Bind that string to a pre tag on the markup
 
+//TODO:
+// 1.) Make sure the app doesn't make look people look fat in vertical mode
+// 2.) First Pass Re-Factor
+// 3.) Polish UI
+// 4.) Second Pass Re-Factor
+
+//Stretch Goals
+// 1.) Select a local file to view in ASCII
+// 2.) Select a video at a URL to view in ASCII
+//    a.) Get an iFrame... hide it like the video tag. Bind that to the canvas.
+// 3.) For 1.) and 2.) make sure to componentize the project
+// 4.) The ASCII player should render the pre and take in as props the canvas
+
 class App extends Component {
   state = {
     originalContentWidth: 720,
