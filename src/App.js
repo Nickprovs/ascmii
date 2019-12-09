@@ -6,8 +6,8 @@ import "./App.css";
 //Get camera stream from WebRtc
 //Poop that into hidden video element
 //Periodically draw a video frame to a hidden canvas
-//Loop through that image's canvas data and build a formatted text string
-//Assign that
+//Loop through that image's canvas data and build a formatted image-like ascii string
+//Bind that string to a pre tag on the markup
 
 class App extends Component {
   state = {
@@ -140,6 +140,11 @@ class App extends Component {
       const pixelNum = Math.ceil((i + 1) / 4);
       if (i !== 0 && pixelNum % width === 0) {
         console.log("breaking at", pixelNum);
+        //Skip every other line
+        console.log(i);
+        let newI = i + this.canvas.width * 4;
+        console.log(newI);
+        i = newI;
         nextCharacter += "\n";
       }
 
@@ -164,8 +169,8 @@ class App extends Component {
   }
 
   clampDimensions(width, height) {
-    const MAXIMUM_WIDTH = 100;
-    const MAXIMUM_HEIGHT = 67;
+    const MAXIMUM_WIDTH = 187.5;
+    const MAXIMUM_HEIGHT = 125;
 
     if (height > MAXIMUM_HEIGHT) {
       const reducedWidth = Math.floor((width * MAXIMUM_HEIGHT) / height);
@@ -215,7 +220,7 @@ class App extends Component {
         </div>
 
         {/*Canas: Hidden */}
-        <div style={{ display: "none" }}>
+        <div>
           <canvas
             ref={this.setCanvas}
             width={adjustedWidth}
