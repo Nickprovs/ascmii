@@ -40,6 +40,14 @@ class App extends Component {
     };
   }
 
+  componentWillUnmount() {
+    if (this.frameTimer) clearInterval(this.frameTimer);
+  }
+
+  useEffect() {
+    console.log("USE EFFECT");
+  }
+
   async handleBeginClick() {
     try {
       this.currentStream = await navigator.mediaDevices.getUserMedia({
@@ -49,12 +57,13 @@ class App extends Component {
       this.videoPlayer.srcObject = this.currentStream;
       this.setState({ running: true });
       this.initCanvas();
+      this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
     } catch (ex) {
       console.log(ex);
     }
   }
 
-  handleSnapshotClick() {
+  getNextFrame() {
     const { width, height } = this.clampDimensions(
       this.canvas.width,
       this.canvas.height
@@ -231,11 +240,8 @@ class App extends Component {
         {/*ascii */}
         <pre id="ascii">{asciiText}</pre>
 
-        <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
-        {running && (
-          <button onClick={this.handleSnapshotClick.bind(this)}>
-            Snapshot
-          </button>
+        {!running && (
+          <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
         )}
       </div>
     );
