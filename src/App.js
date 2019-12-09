@@ -11,6 +11,8 @@ import "./App.css";
 
 class App extends Component {
   state = {
+    originalContentWidth: 720,
+    originalContentHeight: 480,
     running: false,
     asciiText: "dogs"
   };
@@ -29,6 +31,7 @@ class App extends Component {
     this.canvas = null;
     this.setCanvas = element => {
       this.canvas = element;
+      this.canvasContext = this.canvas.getContext("2d");
     };
 
     this.videoPlayer = null;
@@ -45,31 +48,21 @@ class App extends Component {
       });
       this.videoPlayer.srcObject = this.currentStream;
       this.setState({ running: true });
+      this.initCanvas();
     } catch (ex) {
       console.log(ex);
     }
   }
 
   handleSnapshotClick() {
-    // const [width, height] = this.clampDimensions(
-    //   this.canvas.width,
-    //   this.canvas.height
-    // );
-
-    let width = 144;
-    let height = 100;
-
-    console.log("Desired Coereced");
-    console.log("width", width);
-    console.log("height", height);
+    const { width, height } = this.clampDimensions(
+      this.canvas.width,
+      this.canvas.height
+    );
 
     this.canvas
       .getContext("2d")
       .drawImage(this.videoPlayer, 0, 0, width, height);
-
-    console.log("Reality");
-    console.log("width", width);
-    console.log("height", height);
 
     const canvasContext = this.canvas.getContext("2d");
     const rawAscii = this.getAsciiCharactersFromCanvasContext(
@@ -78,6 +71,14 @@ class App extends Component {
       height
     );
     this.setState({ asciiText: rawAscii });
+  }
+
+  initCanvas() {
+    console.log("translating", this.canvas.width);
+
+    const canvasContext = this.canvas.getContext("2d");
+    canvasContext.translate(this.canvas.width, 0);
+    canvasContext.scale(-1, 1);
   }
 
   getRawAsciiTextForGrayScaleAndWidth(grayScales, width) {
@@ -163,24 +164,42 @@ class App extends Component {
   }
 
   clampDimensions(width, height) {
-    const MAXIMUM_WIDTH = 72;
-    const MAXIMUM_HEIGHT = 50;
+    const MAXIMUM_WIDTH = 100;
+    const MAXIMUM_HEIGHT = 67;
 
     if (height > MAXIMUM_HEIGHT) {
       const reducedWidth = Math.floor((width * MAXIMUM_HEIGHT) / height);
-      return [reducedWidth, MAXIMUM_HEIGHT];
+      return { width: reducedWidth, height: MAXIMUM_HEIGHT };
     }
 
     if (width > MAXIMUM_WIDTH) {
       const reducedHeight = Math.floor((height * MAXIMUM_WIDTH) / width);
-      return [MAXIMUM_WIDTH, reducedHeight];
+      return { width: MAXIMUM_WIDTH, height: reducedHeight };
     }
 
-    return [width, height];
+    return { width: width, height: height };
   }
 
   render() {
-    const { running, asciiText } = this.state;
+    const {
+      originalContentWidth,
+      originalContentHeight,
+      running,
+      asciiText
+    } = this.state;
+
+    console.log("or");
+    console.log(originalContentWidth);
+    console.log(originalContentHeight);
+
+    const {
+      width: adjustedWidth,
+      height: adjustedHeight
+    } = this.clampDimensions(originalContentWidth, originalContentHeight);
+
+    console.log("Adjusted");
+    console.log(adjustedWidth);
+    console.log(adjustedHeight);
 
     return (
       <div className="App">
@@ -190,14 +209,18 @@ class App extends Component {
             ref={this.setVideoPlayer}
             autoPlay
             playsInline
-            width="720"
-            height="480"
+            width={originalContentWidth}
+            height={originalContentHeight}
           />
         </div>
 
         {/*Canas: Hidden */}
-        <div>
-          <canvas ref={this.setCanvas} width="720" height="480" />
+        <div style={{ display: "none" }}>
+          <canvas
+            ref={this.setCanvas}
+            width={adjustedWidth}
+            height={adjustedHeight}
+          />
         </div>
 
         {/*ascii */}
