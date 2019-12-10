@@ -31,16 +31,16 @@
 
 @media (orientation: landscape) {
   #ascii {
-    font-size: 0.7vw;
-    line-height: 0.7vw;
-    letter-spacing: -0.1vw;
+    font-size: 0.55vw;
+    line-height: 0.6vw;
+    letter-spacing: -0.05vw;
   }
 }
 
 @media (orientation: portrait) {
   #ascii {
-    font-size: 0.7vw;
-    line-height: 1.6vw;
+    font-size: 0.75vw;
+    line-height: 0.8vw;
     letter-spacing: -0.05vw;
   }
 }

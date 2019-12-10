@@ -7,6 +7,7 @@ import "./App.css";
 //Poop that into hidden video element
 //Periodically draw a video frame to a hidden canvas
 //Loop through that image's canvas data and build a formatted image-like ascii string
+//Skip every other line (or every third line?) in landscape since ascii is not square like pixels. Don't skip for portrait.
 //Bind that string to a pre tag on the markup
 
 //TODO:
@@ -165,10 +166,12 @@ class App extends Component {
       if (i !== 0 && pixelNum % width === 0) {
         console.log("breaking at", pixelNum);
         //Skip every other line
-        console.log(i);
-        let newI = i + this.canvas.width * 4;
-        console.log(newI);
-        i = newI;
+        if (window.matchMedia("(orientation: landscape)").matches) {
+          console.log("LANDSCAPE");
+          let newI = i + this.canvas.width * 4;
+          i = newI;
+        }
+
         nextCharacter += "\n";
       }
 
