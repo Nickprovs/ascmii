@@ -1,10 +1,20 @@
 Replaced Line 62 of node_modules/react-dev-utils/webpackHotDevClient.js
 
 FROM
-protocol: 'ws',	
+WHOLE BLOCK
 	
 TO
-protocol: window.location.protocol === 'https:' ? 'wss' : 'ws',
+// Connect to WebpackDevServer via a socket.
+var connection = new WebSocket(
+  url.format({
+    protocol: window.location.protocol === 'https:' ? 'wss' : 'ws',
+    hostname: window.location.hostname,
+    port: window.location.port,
+    // Hardcoded in WebpackDevServer
+    pathname: '/sockjs-node',
+    slashes: true,
+  })
+);
 
 At some point, one should revert back and update.
 

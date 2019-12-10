@@ -32,7 +32,10 @@ class App extends Component {
 
   constraints = {
     audio: false,
-    video: true
+    video: { width: { exact: 640 }, height: { exact: 480 } },
+    aspectRatio: {
+      exact: 640 / 480
+    }
   };
 
   constructor(props) {
@@ -63,10 +66,9 @@ class App extends Component {
 
   async handleBeginClick() {
     try {
-      this.currentStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false
-      });
+      this.currentStream = await navigator.mediaDevices.getUserMedia(
+        this.constraints
+      );
       this.videoPlayer.srcObject = this.currentStream;
       this.setState({ running: true });
       this.initCanvas();
@@ -242,7 +244,7 @@ class App extends Component {
         </div>
 
         {/*Canas: Hidden */}
-        <div>
+        <div style={{ display: "none" }}>
           <canvas
             ref={this.setCanvas}
             width={adjustedWidth}
