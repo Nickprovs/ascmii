@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -24,16 +20,23 @@
   color: white;
 }
 
-#ascii {
-  font-family: "Courier New", "Courier", monospace;
+.title {
+  font-family: "Lekton-Regular", monospace;
   text-align: center;
+}
+
+#ascii {
+  font-family: "Lekton-Regular", monospace;
+  text-align: center;
+  width: 100%;
+  height: 100%;
 }
 
 @media (orientation: landscape) {
   #ascii {
     font-size: 0.55vw;
-    line-height: 0.6vw;
-    letter-spacing: -0.05vw;
+    line-height: 0.55vw;
+    letter-spacing: -0.005vw;
   }
 }
 
@@ -43,6 +46,27 @@
     line-height: 0.8vw;
     letter-spacing: -0.05vw;
   }
+}
+
+div#center-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+div#bottom-right-wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 2vw;
+  margin-bottom: 2vh;
+  text-align: right;
+}
+
+.text {
+  font-family: "Lekton-Regular", monospace;
+  font-weight: bold;
 }
 
 .App-link {

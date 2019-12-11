@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 //Flow
@@ -35,7 +34,7 @@ class App extends Component {
     audio: false,
     video: { width: { exact: 640 }, height: { exact: 480 } },
     aspectRatio: {
-      exact: 640 / 480
+      exact: 720 / 480
     }
   };
 
@@ -59,10 +58,6 @@ class App extends Component {
 
   componentWillUnmount() {
     if (this.frameTimer) clearInterval(this.frameTimer);
-  }
-
-  useEffect() {
-    console.log("USE EFFECT");
   }
 
   async handleBeginClick() {
@@ -99,8 +94,6 @@ class App extends Component {
   }
 
   initCanvas() {
-    console.log("translating", this.canvas.width);
-
     const canvasContext = this.canvas.getContext("2d");
     canvasContext.translate(this.canvas.width, 0);
     canvasContext.scale(-1, 1);
@@ -119,9 +112,6 @@ class App extends Component {
   }
 
   getAsciiCharactersFromCanvasContext(context, width, height) {
-    console.log("Width and Height");
-    console.log(width);
-    console.log(height);
     const imageData = context.getImageData(0, 0, width, height);
 
     // calculate contrast factor
@@ -164,10 +154,11 @@ class App extends Component {
 
       const pixelNum = Math.ceil((i + 1) / 4);
       if (i !== 0 && pixelNum % width === 0) {
-        console.log("breaking at", pixelNum);
         //Skip every other line
-        if (window.matchMedia("(orientation: landscape)").matches) {
-          console.log("LANDSCAPE");
+        if (
+          window.matchMedia("(orientation: landscape)").matches &&
+          pixelNum % (3 * width) === 0
+        ) {
           let newI = i + this.canvas.width * 4;
           i = newI;
         }
@@ -220,18 +211,10 @@ class App extends Component {
       asciiText
     } = this.state;
 
-    console.log("or");
-    console.log(originalContentWidth);
-    console.log(originalContentHeight);
-
     const {
       width: adjustedWidth,
       height: adjustedHeight
     } = this.clampDimensions(originalContentWidth, originalContentHeight);
-
-    console.log("Adjusted");
-    console.log(adjustedWidth);
-    console.log(adjustedHeight);
 
     return (
       <div className="App">
@@ -255,12 +238,28 @@ class App extends Component {
           />
         </div>
 
+        {/* <h1 className="title">ascmii</h1> */}
+
         {/*ascii */}
-        <pre id="ascii">{asciiText}</pre>
+        <div id="center-wrapper">
+          <pre id="ascii">{asciiText}</pre>
+        </div>
 
         {!running && (
           <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
         )}
+
+        <div id="bottom-right-wrapper">
+          <div>
+            <label className="text">ascmii</label>
+          </div>
+          <div>
+            <label className="text">Made by</label>
+          </div>
+          <div>
+            <label className="text">Nick Provost</label>
+          </div>
+        </div>
       </div>
     );
   }
