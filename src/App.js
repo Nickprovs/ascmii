@@ -27,6 +27,7 @@ class App extends Component {
     originalContentWidth: 720,
     originalContentHeight: 480,
     running: false,
+    playing: false,
     asciiText: "dogs"
   };
 
@@ -57,7 +58,17 @@ class App extends Component {
   }
 
   componentWillUnmount() {
+    this.stop();
+  }
+
+  play() {
+    this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
+    this.setState({ playing: true });
+  }
+
+  stop() {
     if (this.frameTimer) clearInterval(this.frameTimer);
+    this.setState({ playing: false });
   }
 
   async handleBeginClick() {
@@ -68,7 +79,7 @@ class App extends Component {
       this.videoPlayer.srcObject = this.currentStream;
       this.setState({ running: true });
       this.initCanvas();
-      this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
+      this.play();
     } catch (ex) {
       console.log(ex);
     }
@@ -203,6 +214,11 @@ class App extends Component {
     return { width: width, height: height };
   }
 
+  handleTogglePlay() {
+    if (this.state.playing) this.stop();
+    else this.play();
+  }
+
   render() {
     const {
       originalContentWidth,
@@ -246,7 +262,17 @@ class App extends Component {
         </div>
 
         {!running && (
-          <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
+          <div id="bottom-left-wrapper">
+            <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
+          </div>
+        )}
+
+        {running && (
+          <div id="bottom-left-wrapper">
+            <button onClick={this.handleTogglePlay.bind(this)}>
+              PlayPause
+            </button>
+          </div>
         )}
 
         <div id="bottom-right-wrapper">

@@ -64,6 +64,14 @@ div#bottom-right-wrapper {
   text-align: right;
 }
 
+div#bottom-left-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin-left: 2vw;
+  margin-bottom: 2vh;
+}
+
 .text {
   font-family: "Lekton-Regular", monospace;
   font-weight: bold;
