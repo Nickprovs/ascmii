@@ -219,6 +219,10 @@ class App extends Component {
     else this.play();
   }
 
+  handleToggleCamera() {}
+
+  handleToggleTheme() {}
+
   render() {
     const {
       originalContentWidth,
@@ -259,6 +263,14 @@ class App extends Component {
         {/*ascii */}
         <div id="center-wrapper">
           <pre id="ascii">{asciiText}</pre>
+        </div>
+
+        <div id="top-right-wrapper">
+          <button onClick={this.nadl}>Camera</button>
+        </div>
+
+        <div id="top-left-wrapper">
+          <button onClick="handleToggleTheme">Theme</button>
         </div>
 
         {!running && (
