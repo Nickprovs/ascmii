@@ -262,8 +262,9 @@ class App extends Component {
       <Theme variables={theme}>
         <div className="rootDiv">
           {/*Video: Hidden */}
-          <div style={{ display: "none" }}>
+          <div className="center-wrapper">
             <video
+              style={{ opacity: 0 }}
               ref={this.setVideoPlayer}
               autoPlay
               playsInline
@@ -273,8 +274,10 @@ class App extends Component {
           </div>
 
           {/*Canas: Hidden */}
-          <div style={{ display: "none" }}>
+          {/*  */}
+          <div className="center-wrapper">
             <canvas
+              style={{ opacity: 0 }}
               ref={this.setCanvas}
               width={adjustedWidth}
               height={adjustedHeight}
@@ -284,26 +287,26 @@ class App extends Component {
           {/* <h1 className="title">ascmii</h1> */}
 
           {/*ascii */}
-          <div id="center-wrapper">
+          <div className="center-wrapper">
             <pre id="ascii">{asciiText}</pre>
           </div>
 
-          <div id="top-right-wrapper">
+          <div className="top-right-wrapper">
             <button onClick={this.nadl}>Camera</button>
           </div>
 
-          <div id="top-left-wrapper">
+          <div className="top-left-wrapper">
             <button onClick={this.handleToggleTheme.bind(this)}>Theme</button>
           </div>
 
           {!running && (
-            <div id="bottom-left-wrapper">
+            <div className="bottom-left-wrapper">
               <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
             </div>
           )}
 
           {running && (
-            <div id="bottom-left-wrapper">
+            <div className="bottom-left-wrapper">
               <button
                 className="button"
                 onClick={this.handleTogglePlay.bind(this)}
@@ -313,7 +316,7 @@ class App extends Component {
             </div>
           )}
 
-          <div id="bottom-right-wrapper">
+          <div className="bottom-right-wrapper">
             <div>
               <label className="standard-text">ascmii</label>
             </div>

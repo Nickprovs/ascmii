@@ -35,14 +35,14 @@
   color: var(--f1);
 }
 
-div#center-wrapper {
+.center-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-div#top-left-wrapper {
+.top-left-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -50,7 +50,7 @@ div#top-left-wrapper {
   margin-left: 2vw;
 }
 
-div#top-right-wrapper {
+.top-right-wrapper {
   position: fixed;
   top: 0;
   right: 0;
@@ -59,7 +59,7 @@ div#top-right-wrapper {
   text-align: right;
 }
 
-div#bottom-left-wrapper {
+.bottom-left-wrapper {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -67,7 +67,7 @@ div#bottom-left-wrapper {
   margin-left: 2vw;
 }
 
-div#bottom-right-wrapper {
+.bottom-right-wrapper {
   position: fixed;
   bottom: 0;
   right: 0;
