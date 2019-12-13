@@ -58,6 +58,10 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({ darkModeOn: this.getSavedThemeFromLocalStorage() });
+  }
+
   componentWillUnmount() {
     this.stop();
   }
@@ -225,6 +229,19 @@ class App extends Component {
   handleToggleTheme() {
     const darkModeOn = !this.state.darkModeOn;
     this.setState({ darkModeOn });
+    localStorage.setItem("darkModeOn", darkModeOn);
+  }
+
+  getSavedThemeFromLocalStorage() {
+    let darkModeOn = localStorage.getItem("darkModeOn");
+    if (darkModeOn === null) {
+      console.log("No theme data in browser local storage");
+      darkModeOn = false;
+    } else {
+      darkModeOn = JSON.parse(darkModeOn);
+    }
+
+    return darkModeOn;
   }
 
   render() {
