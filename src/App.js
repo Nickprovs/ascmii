@@ -263,6 +263,7 @@ class App extends Component {
         <div className="rootDiv">
           {/*Video: Hidden */}
           <div className="center-wrapper">
+            {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
             <video
               style={{ opacity: 0 }}
               ref={this.setVideoPlayer}
@@ -274,7 +275,7 @@ class App extends Component {
           </div>
 
           {/*Canas: Hidden */}
-          {/*  */}
+          {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
           <div className="center-wrapper">
             <canvas
               style={{ opacity: 0 }}
