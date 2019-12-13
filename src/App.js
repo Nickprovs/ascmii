@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import Theme from "./components/common/Theme";
 import "./App.css";
-
 //Flow
 //Get camera stream from WebRtc
 //Poop that into hidden video element
@@ -237,68 +237,70 @@ class App extends Component {
     } = this.clampDimensions(originalContentWidth, originalContentHeight);
 
     return (
-      <div className="App">
-        {/*Video: Hidden */}
-        <div style={{ display: "none" }}>
-          <video
-            ref={this.setVideoPlayer}
-            autoPlay
-            playsInline
-            width={originalContentWidth}
-            height={originalContentHeight}
-          />
-        </div>
-
-        {/*Canas: Hidden */}
-        <div style={{ display: "none" }}>
-          <canvas
-            ref={this.setCanvas}
-            width={adjustedWidth}
-            height={adjustedHeight}
-          />
-        </div>
-
-        {/* <h1 className="title">ascmii</h1> */}
-
-        {/*ascii */}
-        <div id="center-wrapper">
-          <pre id="ascii">{asciiText}</pre>
-        </div>
-
-        <div id="top-right-wrapper">
-          <button onClick={this.nadl}>Camera</button>
-        </div>
-
-        <div id="top-left-wrapper">
-          <button onClick="handleToggleTheme">Theme</button>
-        </div>
-
-        {!running && (
-          <div id="bottom-left-wrapper">
-            <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
+      <Theme variables={Theme.Dark}>
+        <div className="rootDiv">
+          {/*Video: Hidden */}
+          <div style={{ display: "none" }}>
+            <video
+              ref={this.setVideoPlayer}
+              autoPlay
+              playsInline
+              width={originalContentWidth}
+              height={originalContentHeight}
+            />
           </div>
-        )}
 
-        {running && (
-          <div id="bottom-left-wrapper">
-            <button onClick={this.handleTogglePlay.bind(this)}>
-              PlayPause
-            </button>
+          {/*Canas: Hidden */}
+          <div style={{ display: "none" }}>
+            <canvas
+              ref={this.setCanvas}
+              width={adjustedWidth}
+              height={adjustedHeight}
+            />
           </div>
-        )}
 
-        <div id="bottom-right-wrapper">
-          <div>
-            <label className="text">ascmii</label>
+          {/* <h1 className="title">ascmii</h1> */}
+
+          {/*ascii */}
+          <div id="center-wrapper">
+            <pre id="ascii">{asciiText}</pre>
           </div>
-          <div>
-            <label className="text">Made by</label>
+
+          <div id="top-right-wrapper">
+            <button onClick={this.nadl}>Camera</button>
           </div>
-          <div>
-            <label className="text">Nick Provost</label>
+
+          <div id="top-left-wrapper">
+            <button onClick="handleToggleTheme">Theme</button>
+          </div>
+
+          {!running && (
+            <div id="bottom-left-wrapper">
+              <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
+            </div>
+          )}
+
+          {running && (
+            <div id="bottom-left-wrapper">
+              <button onClick={this.handleTogglePlay.bind(this)}>
+                PlayPause
+              </button>
+            </div>
+          )}
+
+          <div id="bottom-right-wrapper">
+            <div>
+              <label className="text">ascmii</label>
+            </div>
+            <div>
+              <label className="text">Made by</label>
+            </div>
+            <div>
+              <label className="text">Nick Provost</label>
+            </div>
           </div>
         </div>
-      </div>
+      </Theme>
     );
   }
 }

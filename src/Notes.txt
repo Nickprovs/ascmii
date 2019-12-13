@@ -24,3 +24,6 @@ BUG: https://github.com/facebook/create-react-app/pull/8079
 Additionally, to run accessibly over https (w/o cert)...
 set HTTPS=true&&npm start --host 0.0.0.0
 and access at https://hostMachineIPV4:PORT
+
+
+Themeing Idea from: https://medium.com/trabe/a-simple-react-theme-component-using-css-variables-e20434ae97c

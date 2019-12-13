@@ -1,23 +1,8 @@
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.rootDiv {
+  background-color: var(--b1);
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .title {
@@ -30,6 +15,7 @@
   text-align: center;
   width: 100%;
   height: 100%;
+  color: var(--f1);
 }
 
 @media (orientation: landscape) {
