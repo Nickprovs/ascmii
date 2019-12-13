@@ -304,21 +304,24 @@ class App extends Component {
 
           {running && (
             <div id="bottom-left-wrapper">
-              <button onClick={this.handleTogglePlay.bind(this)}>
-                PlayPause
+              <button
+                className="button"
+                onClick={this.handleTogglePlay.bind(this)}
+              >
+                {this.state.playing ? "Pause" : "Play"}
               </button>
             </div>
           )}
 
           <div id="bottom-right-wrapper">
             <div>
-              <label className="text">ascmii</label>
+              <label className="standard-text">ascmii</label>
             </div>
             <div>
-              <label className="text">Made by</label>
+              <label className="standard-text">Made by</label>
             </div>
             <div>
-              <label className="text">Nick Provost</label>
+              <label className="standard-text">Nick Provost</label>
             </div>
           </div>
         </div>
