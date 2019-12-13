@@ -224,7 +224,21 @@ class App extends Component {
     else this.play();
   }
 
-  handleToggleCamera() {}
+  async handleToggleCamera() {
+    try {
+      const videoConstraints = {
+        facingMode: "environment"
+      };
+      this.constraints.video = videoConstraints;
+
+      this.currentStream = await navigator.mediaDevices.getUserMedia(
+        this.constraints
+      );
+      this.videoPlayer.srcObject = this.currentStream;
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
 
   handleToggleTheme() {
     const darkModeOn = !this.state.darkModeOn;
@@ -293,7 +307,7 @@ class App extends Component {
           </div>
 
           <div className="top-right-wrapper">
-            <button onClick={this.nadl}>Camera</button>
+            <button onClick={this.handleToggleCamera.bind(this)}>Camera</button>
           </div>
 
           <div className="top-left-wrapper">
