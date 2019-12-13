@@ -31,7 +31,6 @@
 
 .standard-text {
   font-family: "Lekton-Regular", monospace;
-  font-weight: bold;
   color: var(--f1);
 }
 
@@ -80,6 +79,7 @@
 }
 
 button {
+  font-family: "Lekton-Regular", monospace;
   color: var(--f1);
   background: var(--b1);
   border-color: var(--f1);
