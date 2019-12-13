@@ -28,7 +28,8 @@ class App extends Component {
     originalContentHeight: 480,
     running: false,
     playing: false,
-    asciiText: "dogs"
+    asciiText: "dogs",
+    darkModeOn: false
   };
 
   constraints = {
@@ -221,7 +222,10 @@ class App extends Component {
 
   handleToggleCamera() {}
 
-  handleToggleTheme() {}
+  handleToggleTheme() {
+    const darkModeOn = !this.state.darkModeOn;
+    this.setState({ darkModeOn });
+  }
 
   render() {
     const {
@@ -236,8 +240,9 @@ class App extends Component {
       height: adjustedHeight
     } = this.clampDimensions(originalContentWidth, originalContentHeight);
 
+    let theme = this.state.darkModeOn ? Theme.Dark : Theme.Light;
     return (
-      <Theme variables={Theme.Dark}>
+      <Theme variables={theme}>
         <div className="rootDiv">
           {/*Video: Hidden */}
           <div style={{ display: "none" }}>
@@ -271,7 +276,7 @@ class App extends Component {
           </div>
 
           <div id="top-left-wrapper">
-            <button onClick="handleToggleTheme">Theme</button>
+            <button onClick={this.handleToggleTheme.bind(this)}>Theme</button>
           </div>
 
           {!running && (
