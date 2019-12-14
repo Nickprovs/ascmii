@@ -1,19 +1,6 @@
 import React, { Component } from "react";
 import Theme from "./components/common/Theme";
 import "./App.css";
-//Flow
-//Get camera stream from WebRtc
-//Poop that into hidden video element
-//Periodically draw a video frame to a hidden canvas
-//Loop through that image's canvas data and build a formatted image-like ascii string
-//Skip every other line (or every third line?) in landscape since ascii is not square like pixels. Don't skip for portrait.
-//Bind that string to a pre tag on the markup
-
-//TODO:
-// 1.) Make sure the app doesn't make look people look fat in vertical mode
-// 2.) First Pass Re-Factor
-// 3.) Polish UI
-// 4.) Second Pass Re-Factor
 
 //Stretch Goals
 // 1.) Select a local file to view in ASCII
