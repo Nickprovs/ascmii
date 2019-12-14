@@ -367,6 +367,7 @@ class App extends Component {
             </div>
             <div className="standard-text-container">
               <a
+                rel="noopener noreferrer"
                 target="_blank"
                 href="http://www.nickprovs.com"
                 className="standard-text standard-text-link"
