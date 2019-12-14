@@ -34,6 +34,14 @@
   color: var(--f1);
 }
 
+.standard-text-link {
+  color: var(--s1);
+}
+
+.standard-text-container {
+  text-align: right;
+}
+
 .center-wrapper {
   position: fixed;
   top: 50%;
@@ -57,9 +65,8 @@
   position: fixed;
   top: 0;
   right: 0;
-  margin-top: 2vw;
-  margin-right: 2vh;
-  text-align: right;
+  margin-top: 2vh;
+  margin-right: 2vw;
 }
 
 .bottom-left-wrapper {
@@ -95,6 +102,15 @@ button {
   button:hover {
     background-color: var(--b2);
   }
+}
+
+button:disabled,
+button[disabled] {
+  cursor: not-allowed;
+  border: solid;
+  border-color: var(--b2);
+  background-color: var(--b3);
+  color: var(f1);
 }
 
 button:active {

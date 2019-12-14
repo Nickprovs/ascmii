@@ -29,15 +29,14 @@ class App extends Component {
     running: false,
     playing: false,
     asciiText: "dogs",
-    darkModeOn: false
+    darkModeOn: false,
+    currentVideoInputId: ""
   };
 
   constraints = {
     audio: false,
-    video: { width: { exact: 640 }, height: { exact: 480 } },
-    aspectRatio: {
-      exact: 720 / 480
-    }
+    video: { width: 640, height: 480 },
+    aspectRatio: 720 / 480
   };
 
   constructor(props) {
@@ -66,6 +65,24 @@ class App extends Component {
     this.stop();
   }
 
+  async getNextVideoInputId() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d => d.kind === "videoinput");
+
+    const currentDeviceInDeviceList = videoDevices.filter(
+      d => d.deviceId === this.state.currentVideoInputId
+    )[0];
+
+    if (!currentDeviceInDeviceList) return videoDevices[0].deviceId;
+
+    const currentIndex = videoDevices.indexOf(currentDeviceInDeviceList);
+    const nextDevice = videoDevices[currentIndex + 1];
+
+    if (!nextDevice) return videoDevices[0].deviceId;
+
+    return nextDevice.deviceId;
+  }
+
   play() {
     this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
     this.setState({ playing: true });
@@ -78,6 +95,11 @@ class App extends Component {
 
   async handleBeginClick() {
     try {
+      const nextDeviceId = await this.getNextVideoInputId();
+      this.state.currentVideoInputId = nextDeviceId;
+
+      this.constraints.video.deviceId = { exact: nextDeviceId };
+
       this.currentStream = await navigator.mediaDevices.getUserMedia(
         this.constraints
       );
@@ -226,10 +248,10 @@ class App extends Component {
 
   async handleToggleCamera() {
     try {
-      const videoConstraints = {
-        facingMode: "environment"
-      };
-      this.constraints.video = videoConstraints;
+      const nextDeviceId = await this.getNextVideoInputId();
+      this.state.currentVideoInputId = nextDeviceId;
+      console.log(nextDeviceId);
+      this.constraints.video.deviceId = { exact: nextDeviceId };
 
       this.currentStream = await navigator.mediaDevices.getUserMedia(
         this.constraints
@@ -307,7 +329,15 @@ class App extends Component {
           </div>
 
           <div className="top-right-wrapper">
-            <button onClick={this.handleToggleCamera.bind(this)}>Camera</button>
+            <button
+              title={
+                running ? "Toggle Camera" : "Must be running to switch camera."
+              }
+              disabled={!running}
+              onClick={this.handleToggleCamera.bind(this)}
+            >
+              Camera
+            </button>
           </div>
 
           <div className="top-left-wrapper">
@@ -332,14 +362,17 @@ class App extends Component {
           )}
 
           <div className="bottom-right-wrapper">
-            <div>
+            <div className="standard-text-container">
               <label className="standard-text">ascmii</label>
             </div>
-            <div>
-              <label className="standard-text">Made by</label>
-            </div>
-            <div>
-              <label className="standard-text">Nick Provost</label>
+            <div className="standard-text-container">
+              <a
+                target="_blank"
+                href="http://www.nickprovs.com"
+                className="standard-text standard-text-link"
+              >
+                Nickprovs
+              </a>
             </div>
           </div>
         </div>
