@@ -13,9 +13,7 @@ export default class WebRtcUtilities {
     if (!currentVideoInputId) return videoDevices[0].deviceId;
 
     //Try and get the next video input device via index of current + 1
-    const currentDeviceInDeviceList = videoDevices.filter(
-      d => d.deviceId === currentVideoInputId
-    )[0];
+    const currentDeviceInDeviceList = videoDevices.filter(d => d.deviceId === currentVideoInputId)[0];
     if (!currentDeviceInDeviceList) return videoDevices[0].deviceId;
     const currentIndex = videoDevices.indexOf(currentDeviceInDeviceList);
     const nextDevice = videoDevices[currentIndex + 1];

@@ -83,20 +83,13 @@ class App extends Component {
   }
 
   getNextFrame() {
-    const { width, height } = this.clampDimensions(
-      this.canvas.width,
-      this.canvas.height
-    );
+    const { width, height } = this.clampDimensions(this.canvas.width, this.canvas.height);
 
-    this.canvas
-      .getContext("2d")
-      .drawImage(this.videoPlayer, 0, 0, width, height);
+    this.canvas.getContext("2d").drawImage(this.videoPlayer, 0, 0, width, height);
 
     const canvasContext = this.canvas.getContext("2d");
     const imageData = canvasContext.getImageData(0, 0, width, height);
-    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
-      imageData
-    );
+    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(imageData);
 
     this.setState({ asciiText: formattedAscii });
   }
@@ -132,20 +125,13 @@ class App extends Component {
 
   async handleToggleCamera() {
     try {
-      const nextDeviceId = await WebRtcUtilities.getNextVideoInputIdAsync(
-        this.currentVideoInputId
-      );
+      const nextDeviceId = await WebRtcUtilities.getNextVideoInputIdAsync(this.currentVideoInputId);
       this.currentVideoInputId = nextDeviceId;
       this.constraints.video.deviceId = { exact: nextDeviceId };
-      this.currentStream = await navigator.mediaDevices.getUserMedia(
-        this.constraints
-      );
+      this.currentStream = await navigator.mediaDevices.getUserMedia(this.constraints);
 
       if (
-        this.getCanvasRequiresFlip(
-          this.canvasFlipped,
-          this.currentStream.getVideoTracks()[0].getSettings().facingMode
-        )
+        this.getCanvasRequiresFlip(this.canvasFlipped, this.currentStream.getVideoTracks()[0].getSettings().facingMode)
       )
         this.flipCanvas();
 
@@ -158,8 +144,7 @@ class App extends Component {
   getCanvasRequiresFlip(canvasAlreadyFlipped, webRtcCameraFacingMode) {
     if (!canvasAlreadyFlipped && webRtcCameraFacingMode === "user") return true;
 
-    if (canvasAlreadyFlipped && webRtcCameraFacingMode === "environment")
-      return true;
+    if (canvasAlreadyFlipped && webRtcCameraFacingMode === "environment") return true;
 
     return false;
   }
@@ -171,17 +156,12 @@ class App extends Component {
   }
 
   render() {
-    const {
-      originalContentWidth,
-      originalContentHeight,
-      running,
-      asciiText
-    } = this.state;
+    const { originalContentWidth, originalContentHeight, running, asciiText } = this.state;
 
-    const {
-      width: adjustedWidth,
-      height: adjustedHeight
-    } = this.clampDimensions(originalContentWidth, originalContentHeight);
+    const { width: adjustedWidth, height: adjustedHeight } = this.clampDimensions(
+      originalContentWidth,
+      originalContentHeight
+    );
 
     let theme = this.state.darkModeOn ? Theme.Dark : Theme.Light;
     return (
@@ -203,12 +183,7 @@ class App extends Component {
           {/*Canas: Hidden */}
           {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
           <div className="center-wrapper">
-            <canvas
-              style={{ opacity: 0 }}
-              ref={this.setCanvas}
-              width={adjustedWidth}
-              height={adjustedHeight}
-            />
+            <canvas style={{ opacity: 0 }} ref={this.setCanvas} width={adjustedWidth} height={adjustedHeight} />
           </div>
 
           {/* <h1 className="title">ascmii</h1> */}
@@ -220,9 +195,7 @@ class App extends Component {
 
           <div className="top-right-wrapper">
             <button
-              title={
-                running ? "Toggle Camera" : "Must be running to switch camera."
-              }
+              title={running ? "Toggle Camera" : "Must be running to switch camera."}
               disabled={!running}
               onClick={this.handleToggleCamera.bind(this)}
             >
@@ -242,10 +215,7 @@ class App extends Component {
 
           {running && (
             <div className="bottom-left-wrapper">
-              <button
-                className="button"
-                onClick={this.handleTogglePlay.bind(this)}
-              >
+              <button className="button" onClick={this.handleTogglePlay.bind(this)}>
                 {this.state.playing ? "Pause" : "Play"}
               </button>
             </div>
