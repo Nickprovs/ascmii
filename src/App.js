@@ -15,7 +15,7 @@ import "./App.css";
 class App extends Component {
   state = {
     asciiText: "dogs",
-    originalContentWidth: 720,
+    originalContentWidth: 640,
     originalContentHeight: 480,
     running: false,
     playing: false,
@@ -35,7 +35,7 @@ class App extends Component {
     this.constraints = {
       audio: false,
       video: { width: 640, height: 480 },
-      aspectRatio: 720 / 480
+      aspectRatio: 640 / 480
     };
 
     this.canvas = null;
@@ -83,7 +83,10 @@ class App extends Component {
   }
 
   getNextFrame() {
-    const { width, height } = this.clampDimensions(this.canvas.width, this.canvas.height);
+    const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
+      this.canvas.width,
+      this.canvas.height
+    );
 
     this.canvas.getContext("2d").drawImage(this.videoPlayer, 0, 0, width, height);
 
@@ -99,23 +102,6 @@ class App extends Component {
     canvasContext.translate(this.canvas.width, 0);
     canvasContext.scale(-1, 1);
     this.canvasFlipped = !this.canvasFlipped;
-  }
-
-  clampDimensions(width, height) {
-    const MAXIMUM_WIDTH = 187.5;
-    const MAXIMUM_HEIGHT = 125;
-
-    if (height > MAXIMUM_HEIGHT) {
-      const reducedWidth = Math.floor((width * MAXIMUM_HEIGHT) / height);
-      return { width: reducedWidth, height: MAXIMUM_HEIGHT };
-    }
-
-    if (width > MAXIMUM_WIDTH) {
-      const reducedHeight = Math.floor((height * MAXIMUM_WIDTH) / width);
-      return { width: MAXIMUM_WIDTH, height: reducedHeight };
-    }
-
-    return { width: width, height: height };
   }
 
   handleTogglePlay() {
@@ -158,7 +144,7 @@ class App extends Component {
   render() {
     const { originalContentWidth, originalContentHeight, running, asciiText } = this.state;
 
-    const { width: adjustedWidth, height: adjustedHeight } = this.clampDimensions(
+    const { width: adjustedWidth, height: adjustedHeight } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
       originalContentWidth,
       originalContentHeight
     );

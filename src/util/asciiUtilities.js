@@ -1,6 +1,23 @@
 const asciiCharacterPalette = " .,:;i1tfLCG08@".split("");
 
 export default class AsciiUtilities {
+  static getRealisticDimensionForFittedAsciiText(width, height) {
+    const MAXIMUM_WIDTH = 187.5;
+    const MAXIMUM_HEIGHT = MAXIMUM_WIDTH * (height / width);
+
+    if (height > MAXIMUM_HEIGHT) {
+      const reducedWidth = Math.floor((width * MAXIMUM_HEIGHT) / height);
+      return { width: reducedWidth, height: MAXIMUM_HEIGHT };
+    }
+
+    if (width > MAXIMUM_WIDTH) {
+      const reducedHeight = Math.floor((height * MAXIMUM_WIDTH) / width);
+      return { width: MAXIMUM_WIDTH, height: reducedHeight };
+    }
+
+    return { width: width, height: height };
+  }
+
   static getFormattedAsciiCharactersFromCanvasImageData(canvasImageData, contrast = 128) {
     let ascii = "";
 
@@ -16,9 +33,10 @@ export default class AsciiUtilities {
       let nextAsciiCharacter = this.getAsciiCharacterFromPixelBrightness(pixelBrightness);
       const pixelIndex = Math.ceil((i + 1) / 4);
 
-      if (this.reachedEndOfRow(i, canvasImageData.width)) {
+      if (this.reachedEndOfRow(pixelIndex, canvasImageData.width)) {
         nextAsciiCharacter += "\n";
-        if (this.reachedLineSkipIndex(i, canvasImageData.width)) i = i + canvasImageData.width * 4;
+
+        if (this.reachedLineSkipIndex(pixelIndex, canvasImageData.width)) i = i + canvasImageData.width * 4;
       }
 
       ascii = ascii + nextAsciiCharacter;
