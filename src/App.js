@@ -35,7 +35,8 @@ class App extends Component {
     this.constraints = {
       audio: false,
       video: { width: 640, height: 480 },
-      aspectRatio: 640 / 480
+      aspectRatio: 640 / 480,
+      frameRate: { ideal: 30, max: 60 }
     };
 
     this.canvas = null;
@@ -50,36 +51,71 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({
       darkModeOn: this.theming.getSavedDarkModeOnStatus()
     });
+
+    await this.init();
+  }
+
+  async init() {
+    await this.setNextVideoInputId();
   }
 
   componentWillUnmount() {
     this.stop();
   }
 
-  play() {
-    this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
-    this.setState({ playing: true });
-  }
-
-  stop() {
-    if (this.frameTimer) clearInterval(this.frameTimer);
-    this.setState({ playing: false });
-  }
-
-  async handleBeginClick() {
+  async setNextVideoInputId() {
     try {
-      await this.handleToggleCamera();
-
-      this.setState({ running: true });
-
-      this.play();
+      const nextDeviceId = await WebRtcUtilities.getNextVideoInputIdAsync(this.currentVideoInputId);
+      this.currentVideoInputId = nextDeviceId;
     } catch (ex) {
       console.log(ex);
     }
+  }
+
+  async play() {
+    try {
+      if (this.state.playing) await this.stop();
+
+      this.constraints.video.deviceId = { exact: this.currentVideoInputId };
+      this.currentStream = await navigator.mediaDevices.getUserMedia(this.constraints);
+      if (
+        this.getCanvasRequiresFlip(this.canvasFlipped, this.currentStream.getVideoTracks()[0].getSettings().facingMode)
+      )
+        this.flipCanvas();
+
+      this.videoPlayer.srcObject = this.currentStream;
+
+      const frameRate = WebRtcUtilities.getFrameRateForMediaStream(this.currentStream);
+      this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / frameRate);
+      this.setState({ playing: true });
+      this.setState({ running: true });
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  stop() {
+    if (!this.state.playing) return;
+    if (this.frameTimer) clearInterval(this.frameTimer);
+    WebRtcUtilities.stopStreamedVideo(this.videoPlayer);
+    this.setState({ playing: false });
+  }
+
+  async handleToggleCamera() {
+    await this.stop();
+    await this.setNextVideoInputId();
+    await this.play();
+  }
+
+  flipCanvas() {
+    const canvasContext = this.canvas.getContext("2d");
+    canvasContext.translate(this.canvas.width, 0);
+    canvasContext.scale(-1, 1);
+    this.canvasFlipped = !this.canvasFlipped;
   }
 
   getNextFrame() {
@@ -97,34 +133,9 @@ class App extends Component {
     this.setState({ asciiText: formattedAscii });
   }
 
-  flipCanvas() {
-    const canvasContext = this.canvas.getContext("2d");
-    canvasContext.translate(this.canvas.width, 0);
-    canvasContext.scale(-1, 1);
-    this.canvasFlipped = !this.canvasFlipped;
-  }
-
   handleTogglePlay() {
     if (this.state.playing) this.stop();
     else this.play();
-  }
-
-  async handleToggleCamera() {
-    try {
-      const nextDeviceId = await WebRtcUtilities.getNextVideoInputIdAsync(this.currentVideoInputId);
-      this.currentVideoInputId = nextDeviceId;
-      this.constraints.video.deviceId = { exact: nextDeviceId };
-      this.currentStream = await navigator.mediaDevices.getUserMedia(this.constraints);
-
-      if (
-        this.getCanvasRequiresFlip(this.canvasFlipped, this.currentStream.getVideoTracks()[0].getSettings().facingMode)
-      )
-        this.flipCanvas();
-
-      this.videoPlayer.srcObject = this.currentStream;
-    } catch (ex) {
-      console.log(ex);
-    }
   }
 
   getCanvasRequiresFlip(canvasAlreadyFlipped, webRtcCameraFacingMode) {
@@ -156,14 +167,7 @@ class App extends Component {
           {/*Video: Hidden */}
           <div className="center-wrapper">
             {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
-            <video
-              style={{ opacity: 0 }}
-              ref={this.setVideoPlayer}
-              autoPlay
-              playsInline
-              width={originalContentWidth}
-              height={originalContentHeight}
-            />
+            <video style={{ opacity: 0 }} ref={this.setVideoPlayer} autoPlay playsInline />
           </div>
 
           {/*Canas: Hidden */}
@@ -193,19 +197,11 @@ class App extends Component {
             <button onClick={this.handleToggleTheme.bind(this)}>Theme</button>
           </div>
 
-          {!running && (
-            <div className="bottom-left-wrapper">
-              <button onClick={this.handleBeginClick.bind(this)}>Begin</button>
-            </div>
-          )}
-
-          {running && (
-            <div className="bottom-left-wrapper">
-              <button className="button" onClick={this.handleTogglePlay.bind(this)}>
-                {this.state.playing ? "Pause" : "Play"}
-              </button>
-            </div>
-          )}
+          <div className="bottom-left-wrapper">
+            <button className="button" onClick={this.handleTogglePlay.bind(this)}>
+              {this.state.playing ? "Pause" : "Play"}
+            </button>
+          </div>
 
           <div className="bottom-right-wrapper">
             <div className="standard-text-container">

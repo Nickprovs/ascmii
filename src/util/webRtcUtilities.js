@@ -21,4 +21,19 @@ export default class WebRtcUtilities {
 
     return nextDevice.deviceId;
   }
+
+  static stopStreamedVideo(videoElem) {
+    let stream = videoElem.srcObject;
+    let tracks = stream.getTracks();
+
+    for (let track of tracks) {
+      track.stop();
+    }
+
+    videoElem.srcObject = null;
+  }
+
+  static getFrameRateForMediaStream(mediaStream) {
+    return mediaStream.getVideoTracks()[0].getSettings().frameRate;
+  }
 }
