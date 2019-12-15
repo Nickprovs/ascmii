@@ -16,8 +16,7 @@ class App extends Component {
     running: false,
     playing: false,
     asciiText: "dogs",
-    darkModeOn: false,
-    currentVideoInputId: ""
+    darkModeOn: false
   };
 
   constraints = {
@@ -31,6 +30,8 @@ class App extends Component {
     this.characters = " .,:;i1tfLCG08@".split("");
     this.currentStream = null;
     this.contrast = 128;
+    this.currentVideoInputId = "";
+    this.canvasFlipped = false;
 
     this.canvas = null;
     this.setCanvas = element => {
@@ -55,9 +56,8 @@ class App extends Component {
   async getNextVideoInputId() {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoDevices = devices.filter(d => d.kind === "videoinput");
-
     const currentDeviceInDeviceList = videoDevices.filter(
-      d => d.deviceId === this.state.currentVideoInputId
+      d => d.deviceId === this.currentVideoInputId
     )[0];
 
     if (!currentDeviceInDeviceList) return videoDevices[0].deviceId;
@@ -82,17 +82,10 @@ class App extends Component {
 
   async handleBeginClick() {
     try {
-      const nextDeviceId = await this.getNextVideoInputId();
-      this.state.currentVideoInputId = nextDeviceId;
+      await this.handleToggleCamera();
 
-      this.constraints.video.deviceId = { exact: nextDeviceId };
-
-      this.currentStream = await navigator.mediaDevices.getUserMedia(
-        this.constraints
-      );
-      this.videoPlayer.srcObject = this.currentStream;
       this.setState({ running: true });
-      this.initCanvas();
+
       this.play();
     } catch (ex) {
       console.log(ex);
@@ -118,10 +111,11 @@ class App extends Component {
     this.setState({ asciiText: rawAscii });
   }
 
-  initCanvas() {
+  flipCanvas() {
     const canvasContext = this.canvas.getContext("2d");
     canvasContext.translate(this.canvas.width, 0);
     canvasContext.scale(-1, 1);
+    this.canvasFlipped = !this.canvasFlipped;
   }
 
   getRawAsciiTextForGrayScaleAndWidth(grayScales, width) {
@@ -236,13 +230,26 @@ class App extends Component {
   async handleToggleCamera() {
     try {
       const nextDeviceId = await this.getNextVideoInputId();
-      this.state.currentVideoInputId = nextDeviceId;
-      console.log(nextDeviceId);
+      this.currentVideoInputId = nextDeviceId;
       this.constraints.video.deviceId = { exact: nextDeviceId };
-
       this.currentStream = await navigator.mediaDevices.getUserMedia(
         this.constraints
       );
+
+      if (
+        !this.canvasFlipped &&
+        this.currentStream.getVideoTracks()[0].getSettings().facingMode ===
+          "user"
+      )
+        this.flipCanvas();
+
+      if (
+        this.canvasFlipped &&
+        this.currentStream.getVideoTracks()[0].getSettings().facingMode ===
+          "environment"
+      )
+        this.flipCanvas();
+
       this.videoPlayer.srcObject = this.currentStream;
     } catch (ex) {
       console.log(ex);
