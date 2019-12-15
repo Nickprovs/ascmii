@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Theme from "./components/common/Theme";
 import WebRtcUtilities from "./util/webRtcUtilities";
+import AsciiUtilities from "./util/asciiUtilities";
 import Theming from "./lib/theming";
 import "./App.css";
 
@@ -92,12 +93,12 @@ class App extends Component {
       .drawImage(this.videoPlayer, 0, 0, width, height);
 
     const canvasContext = this.canvas.getContext("2d");
-    const rawAscii = this.getAsciiCharactersFromCanvasContext(
-      canvasContext,
-      width,
-      height
+    const imageData = canvasContext.getImageData(0, 0, width, height);
+    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
+      imageData
     );
-    this.setState({ asciiText: rawAscii });
+
+    this.setState({ asciiText: formattedAscii });
   }
 
   flipCanvas() {
@@ -105,75 +106,6 @@ class App extends Component {
     canvasContext.translate(this.canvas.width, 0);
     canvasContext.scale(-1, 1);
     this.canvasFlipped = !this.canvasFlipped;
-  }
-
-  getAsciiCharactersFromCanvasContext(context, width, height) {
-    const imageData = context.getImageData(0, 0, width, height);
-
-    // calculate contrast factor
-    // http://www.dfstudios.co.uk/articles/image-processing-algorithms-part-5/
-    var contrastFactor =
-      (259 * (this.contrast + 255)) / (255 * (259 - this.contrast));
-
-    let ascii = "";
-
-    for (let i = 0; i < imageData.data.length; i += 4) {
-      const r = imageData.data[i];
-      const g = imageData.data[i + 1];
-      const b = imageData.data[i + 2];
-      const a = imageData.data[i + 3];
-
-      var contrastedColor = {
-        red: this.bound(Math.floor((r - 128) * contrastFactor) + 128, [0, 255]),
-        green: this.bound(Math.floor((g - 128) * contrastFactor) + 128, [
-          0,
-          255
-        ]),
-        blue: this.bound(Math.floor((b - 128) * contrastFactor) + 128, [
-          0,
-          255
-        ]),
-        alpha: a.alpha
-      };
-
-      var brightness =
-        (0.299 * contrastedColor.red +
-          0.587 * contrastedColor.green +
-          0.114 * contrastedColor.blue) /
-        255;
-
-      var nextCharacter = this.characters[
-        this.characters.length -
-          1 -
-          Math.round(brightness * (this.characters.length - 1))
-      ];
-
-      const pixelNum = Math.ceil((i + 1) / 4);
-      if (i !== 0 && pixelNum % width === 0) {
-        //Skip every other line
-        if (
-          window.matchMedia("(orientation: landscape)").matches &&
-          pixelNum % (3 * width) === 0
-        ) {
-          let newI = i + this.canvas.width * 4;
-          i = newI;
-        }
-
-        nextCharacter += "\n";
-      }
-
-      ascii = ascii + nextCharacter;
-    }
-
-    return ascii;
-  }
-
-  bound(value, interval) {
-    return Math.max(interval[0], Math.min(interval[1], value));
-  }
-
-  getGrayscaleValueFromRBG(r, g, b) {
-    return 0.21 * r + 0.72 * g + 0.07 * b;
   }
 
   clampDimensions(width, height) {
