@@ -209,7 +209,13 @@ class App extends Component {
         this.constraints
       );
 
-      if (this.getCanvasRequiresFlip()) this.flipCanvas();
+      if (
+        this.getCanvasRequiresFlip(
+          this.canvasFlipped,
+          this.currentStream.getVideoTracks()[0].getSettings().facingMode
+        )
+      )
+        this.flipCanvas();
 
       this.videoPlayer.srcObject = this.currentStream;
     } catch (ex) {
@@ -217,18 +223,10 @@ class App extends Component {
     }
   }
 
-  getCanvasRequiresFlip() {
-    if (
-      !this.canvasFlipped &&
-      this.currentStream.getVideoTracks()[0].getSettings().facingMode === "user"
-    )
-      return true;
+  getCanvasRequiresFlip(canvasAlreadyFlipped, webRtcCameraFacingMode) {
+    if (!canvasAlreadyFlipped && webRtcCameraFacingMode === "user") return true;
 
-    if (
-      this.canvasFlipped &&
-      this.currentStream.getVideoTracks()[0].getSettings().facingMode ===
-        "environment"
-    )
+    if (canvasAlreadyFlipped && webRtcCameraFacingMode === "environment")
       return true;
 
     return false;
