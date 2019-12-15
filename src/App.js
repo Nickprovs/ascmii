@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Theme from "./components/common/Theme";
+import WebRtcUtilities from "./util/webRtcUtilities";
 import "./App.css";
 
 //Stretch Goals
@@ -11,18 +12,12 @@ import "./App.css";
 
 class App extends Component {
   state = {
+    asciiText: "dogs",
     originalContentWidth: 720,
     originalContentHeight: 480,
     running: false,
     playing: false,
-    asciiText: "dogs",
     darkModeOn: false
-  };
-
-  constraints = {
-    audio: false,
-    video: { width: 640, height: 480 },
-    aspectRatio: 720 / 480
   };
 
   constructor(props) {
@@ -32,6 +27,11 @@ class App extends Component {
     this.contrast = 128;
     this.currentVideoInputId = "";
     this.canvasFlipped = false;
+    this.constraints = {
+      audio: false,
+      video: { width: 640, height: 480 },
+      aspectRatio: 720 / 480
+    };
 
     this.canvas = null;
     this.setCanvas = element => {
@@ -51,23 +51,6 @@ class App extends Component {
 
   componentWillUnmount() {
     this.stop();
-  }
-
-  async getNextVideoInputId() {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const videoDevices = devices.filter(d => d.kind === "videoinput");
-    const currentDeviceInDeviceList = videoDevices.filter(
-      d => d.deviceId === this.currentVideoInputId
-    )[0];
-
-    if (!currentDeviceInDeviceList) return videoDevices[0].deviceId;
-
-    const currentIndex = videoDevices.indexOf(currentDeviceInDeviceList);
-    const nextDevice = videoDevices[currentIndex + 1];
-
-    if (!nextDevice) return videoDevices[0].deviceId;
-
-    return nextDevice.deviceId;
   }
 
   play() {
@@ -116,18 +99,6 @@ class App extends Component {
     canvasContext.translate(this.canvas.width, 0);
     canvasContext.scale(-1, 1);
     this.canvasFlipped = !this.canvasFlipped;
-  }
-
-  getRawAsciiTextForGrayScaleAndWidth(grayScales, width) {
-    let ascii = "";
-    for (let i = 0; i < grayScales.length; i++) {
-      let nextCharacter = this.getCharacterForGrayScale(grayScales[i]);
-      if ((i + 1) % width === 0) nextCharacter += "\n";
-
-      ascii = ascii + nextCharacter;
-    }
-
-    return ascii;
   }
 
   getAsciiCharactersFromCanvasContext(context, width, height) {
@@ -199,12 +170,6 @@ class App extends Component {
     return 0.21 * r + 0.72 * g + 0.07 * b;
   }
 
-  getCharacterForGrayScale(grayScale) {
-    return this.grayRamp[
-      Math.ceil(((this.grayRamp.length - 1) * grayScale) / 255)
-    ];
-  }
-
   clampDimensions(width, height) {
     const MAXIMUM_WIDTH = 187.5;
     const MAXIMUM_HEIGHT = 125;
@@ -229,7 +194,9 @@ class App extends Component {
 
   async handleToggleCamera() {
     try {
-      const nextDeviceId = await this.getNextVideoInputId();
+      const nextDeviceId = await WebRtcUtilities.getNextVideoInputIdAsync(
+        this.currentVideoInputId
+      );
       this.currentVideoInputId = nextDeviceId;
       this.constraints.video.deviceId = { exact: nextDeviceId };
       this.currentStream = await navigator.mediaDevices.getUserMedia(
