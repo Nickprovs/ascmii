@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Theme from "./components/common/Theme";
 import WebRtcUtilities from "./util/webRtcUtilities";
+import Theming from "./lib/theming";
 import "./App.css";
 
 //Stretch Goals
@@ -22,6 +23,9 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+
+    this.theming = new Theming();
+
     this.characters = " .,:;i1tfLCG08@".split("");
     this.currentStream = null;
     this.contrast = 128;
@@ -46,7 +50,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({ darkModeOn: this.getSavedThemeFromLocalStorage() });
+    this.setState({
+      darkModeOn: this.theming.getSavedDarkModeOnStatus()
+    });
   }
 
   componentWillUnmount() {
@@ -203,19 +209,7 @@ class App extends Component {
         this.constraints
       );
 
-      if (
-        !this.canvasFlipped &&
-        this.currentStream.getVideoTracks()[0].getSettings().facingMode ===
-          "user"
-      )
-        this.flipCanvas();
-
-      if (
-        this.canvasFlipped &&
-        this.currentStream.getVideoTracks()[0].getSettings().facingMode ===
-          "environment"
-      )
-        this.flipCanvas();
+      if (this.getCanvasRequiresFlip()) this.flipCanvas();
 
       this.videoPlayer.srcObject = this.currentStream;
     } catch (ex) {
@@ -223,22 +217,27 @@ class App extends Component {
     }
   }
 
+  getCanvasRequiresFlip() {
+    if (
+      !this.canvasFlipped &&
+      this.currentStream.getVideoTracks()[0].getSettings().facingMode === "user"
+    )
+      return true;
+
+    if (
+      this.canvasFlipped &&
+      this.currentStream.getVideoTracks()[0].getSettings().facingMode ===
+        "environment"
+    )
+      return true;
+
+    return false;
+  }
+
   handleToggleTheme() {
     const darkModeOn = !this.state.darkModeOn;
     this.setState({ darkModeOn });
-    localStorage.setItem("darkModeOn", darkModeOn);
-  }
-
-  getSavedThemeFromLocalStorage() {
-    let darkModeOn = localStorage.getItem("darkModeOn");
-    if (darkModeOn === null) {
-      console.log("No theme data in browser local storage");
-      darkModeOn = false;
-    } else {
-      darkModeOn = JSON.parse(darkModeOn);
-    }
-
-    return darkModeOn;
+    this.theming.saveDarkModeOnStatus(darkModeOn);
   }
 
   render() {
