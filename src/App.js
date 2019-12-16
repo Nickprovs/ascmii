@@ -5,18 +5,9 @@ import AsciiUtilities from "./util/asciiUtilities";
 import Theming from "./lib/theming";
 import "./App.css";
 
-//Stretch Goals
-// 1.) Select a local file to view in ASCII
-// 2.) Select a video at a URL to view in ASCII
-//    a.) Get an iFrame... hide it like the video tag. Bind that to the canvas.
-// 3.) For 1.) and 2.) make sure to componentize the project
-// 4.) The ASCII player should render the pre and take in as props the canvas
-
 class App extends Component {
   state = {
-    asciiText: "dogs",
-    originalContentWidth: 640,
-    originalContentHeight: 480,
+    asciiText: "ascmii",
     running: false,
     playing: false,
     darkModeOn: false
@@ -32,10 +23,12 @@ class App extends Component {
     this.contrast = 128;
     this.currentVideoInputId = "";
     this.canvasFlipped = false;
+    this.requestedWidth = 640;
+    this.requestedHeight = 480;
     this.constraints = {
       audio: false,
-      video: { width: 640, height: 480 },
-      aspectRatio: 640 / 480,
+      video: { width: this.requestedWidth, height: this.requestedHeight },
+      aspectRatio: this.requestedWidth / this.requestedHeight,
       frameRate: { ideal: 30, max: 60 }
     };
 
@@ -59,12 +52,12 @@ class App extends Component {
     await this.init();
   }
 
-  async init() {
-    await this.setNextVideoInputId();
-  }
-
   componentWillUnmount() {
     this.stop();
+  }
+
+  async init() {
+    await this.setNextVideoInputId();
   }
 
   async setNextVideoInputId() {
@@ -105,10 +98,12 @@ class App extends Component {
     this.setState({ playing: false });
   }
 
-  async handleToggleCamera() {
-    await this.stop();
-    await this.setNextVideoInputId();
-    await this.play();
+  getCanvasRequiresFlip(canvasAlreadyFlipped, webRtcCameraFacingMode) {
+    if (!canvasAlreadyFlipped && webRtcCameraFacingMode === "user") return true;
+
+    if (canvasAlreadyFlipped && webRtcCameraFacingMode === "environment") return true;
+
+    return false;
   }
 
   flipCanvas() {
@@ -133,17 +128,15 @@ class App extends Component {
     this.setState({ asciiText: formattedAscii });
   }
 
-  handleTogglePlay() {
+  async handleTogglePlay() {
     if (this.state.playing) this.stop();
-    else this.play();
+    else await this.play();
   }
 
-  getCanvasRequiresFlip(canvasAlreadyFlipped, webRtcCameraFacingMode) {
-    if (!canvasAlreadyFlipped && webRtcCameraFacingMode === "user") return true;
-
-    if (canvasAlreadyFlipped && webRtcCameraFacingMode === "environment") return true;
-
-    return false;
+  async handleToggleCamera() {
+    await this.stop();
+    await this.setNextVideoInputId();
+    await this.play();
   }
 
   handleToggleTheme() {
@@ -153,11 +146,11 @@ class App extends Component {
   }
 
   render() {
-    const { originalContentWidth, originalContentHeight, running, asciiText } = this.state;
+    const { running, playing, asciiText } = this.state;
 
     const { width: adjustedWidth, height: adjustedHeight } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
-      originalContentWidth,
-      originalContentHeight
+      this.requestedWidth,
+      this.requestedHeight
     );
 
     let theme = this.state.darkModeOn ? Theme.Dark : Theme.Light;
@@ -199,7 +192,7 @@ class App extends Component {
 
           <div className="bottom-left-wrapper">
             <button className="button" onClick={this.handleTogglePlay.bind(this)}>
-              {this.state.playing ? "Pause" : "Play"}
+              {playing ? "Pause" : "Play"}
             </button>
           </div>
 
