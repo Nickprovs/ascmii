@@ -48,7 +48,7 @@ class App extends Component {
             <Switch>
               <Route path="/camera" component={CameraVisualizer} />
               <Route path="/not-found" component={NotFound} />
-              {/* <Redirect exact from="/" to="/camera" /> */}
+              <Redirect exact from="/" to="/camera" />
               <Redirect to="/not-found" />
             </Switch>
           </div>
