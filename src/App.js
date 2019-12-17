@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import Theme from "./components/common/theme";
 import Theming from "./lib/theming";
 import CameraVisualizer from "./components/cameraVisualizer";
+import NotFound from "./components/notFound";
 import "./App.css";
 
 class App extends Component {
@@ -34,7 +36,16 @@ class App extends Component {
           <button onClick={this.handleToggleTheme.bind(this)}>Theme</button>
         </div>
 
-        <CameraVisualizer style={{ zIndex: "1" }} />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/camera" component={CameraVisualizer} />
+            <Route path="/not-found" component={NotFound} />
+            <Redirect exact from="/" to="/camera" />
+            <Redirect to="/not-found" />
+          </Switch>
+        </BrowserRouter>
+
+        {/* <CameraVisualizer style={{ zIndex: "1" }} /> */}
       </Theme>
     );
   }
