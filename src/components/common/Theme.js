@@ -1,6 +1,6 @@
 import React, { Component, createRef } from "react";
-import LightTheme from "../../themes/lightTheme";
-import DarkTheme from "../../themes/darkTheme";
+import LightTheme from "../../styles/themes/lightTheme";
+import DarkTheme from "../../styles/themes/darkTheme";
 
 class Theme extends Component {
   node = createRef();
@@ -16,9 +16,7 @@ class Theme extends Component {
   }
 
   updateCSSVariables() {
-    Object.entries(this.props.variables).forEach(([prop, value]) =>
-      this.node.current.style.setProperty(prop, value)
-    );
+    Object.entries(this.props.variables).forEach(([prop, value]) => this.node.current.style.setProperty(prop, value));
   }
 
   render() {
