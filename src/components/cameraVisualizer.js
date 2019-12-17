@@ -11,7 +11,6 @@ class CameraVisualizer extends Component {
 
   constructor(props) {
     super(props);
-
     this.characters = " .,:;i1tfLCG08@".split("");
     this.currentStream = null;
     this.contrast = 128;

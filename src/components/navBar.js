@@ -10,7 +10,7 @@ const NavBar = props => {
         <div className="nav-title">ascmii</div>
       </div>
       <div className="nav-btn">
-        <label for="nav-check">
+        <label htmlFor="nav-check">
           <span></span>
           <span></span>
           <span></span>

@@ -7,6 +7,7 @@ body {
 }
 
 .nav {
+  z-index: 1000;
   height: 50px;
   width: 100%;
   background-color: #4d4d4d;
@@ -78,7 +79,8 @@ body {
     width: 100%;
     background-color: #333;
     height: 0px;
-    transition: all 0.3s ease-in;
+    max-height: 500px;
+    transition: 0.5s ease-in;
     overflow-y: hidden;
     top: 50px;
     left: 0px;
@@ -91,7 +93,7 @@ body {
     height: 0px;
   }
   .nav > #nav-check:checked ~ .nav-links {
-    height: calc(30vh);
+    height: auto;
     overflow-y: auto;
   }
 }
