@@ -9,6 +9,25 @@ class NavBar extends Component {
 
   constructor(props) {
     super(props);
+
+    this.navBar = null;
+    this.setNavBarRef = element => {
+      this.navBar = element;
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleGlobalClick.bind(this));
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleGlobalClick.bind(this));
+  }
+
+  handleGlobalClick(event) {
+    if (this.navBar && !this.navBar.contains(event.target)) {
+      this.setState({ isOpen: false });
+    }
   }
 
   handleNavBarClick() {
@@ -22,7 +41,7 @@ class NavBar extends Component {
   render() {
     const { onThemeClick } = this.props;
     return (
-      <div className="nav">
+      <div ref={this.setNavBarRef} className="nav">
         <input type="checkbox" id="nav-check" onClick={this.handleNavBarClick.bind(this)} checked={this.state.isOpen} />
         <div className="nav-header">
           <Link
