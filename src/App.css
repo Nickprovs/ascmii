@@ -90,6 +90,13 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  margin-bottom: 2vh;
-  margin-right: 2vw;
+  margin-bottom: 1vh;
+  margin-right: 1vw;
+}
+
+.standardBorder {
+  border-color: var(--f1);
+  border-radius: 4px;
+  border-width: 0.75px;
+  padding: 5px 7px;
 }

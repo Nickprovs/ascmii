@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import WebRtcUtilities from "../util/webRtcUtilities";
 import AsciiUtilities from "../util/asciiUtilities";
+import StandardButton from "../components/common/standardButton";
 
 class CameraVisualizer extends Component {
   state = {
@@ -150,42 +151,32 @@ class CameraVisualizer extends Component {
           <canvas style={{ opacity: 0 }} ref={this.setCanvas} width={adjustedWidth} height={adjustedHeight} />
         </div>
 
-        {/* <h1 className="title">ascmii</h1> */}
-
         {/*ascii */}
         <div className="center-wrapper">
           <pre id="ascii">{asciiText}</pre>
         </div>
 
-        <div className="top-right-wrapper">
-          <button
-            title={running ? "Toggle Camera" : "Must be running to switch camera."}
-            disabled={!running}
-            onClick={this.handleToggleCamera.bind(this)}
-          >
-            Camera
-          </button>
-        </div>
-
-        <div className="bottom-left-wrapper">
-          <button className="button" onClick={this.handleTogglePlay.bind(this)}>
-            {playing ? "Pause" : "Play"}
-          </button>
-        </div>
-
-        <div className="bottom-right-wrapper">
-          <div className="standard-text-container">
-            <label className="standard-text">ascmii</label>
+        <div
+          style={{
+            padding: "4px",
+            borderStyle: "solid",
+            borderColor: "var(--f1)",
+            borderWidth: "0.75px",
+            borderRadius: "4px"
+          }}
+          className="bottom-right-wrapper"
+        >
+          <div>
+            <StandardButton onClick={this.handleTogglePlay.bind(this)}>{playing ? "Pause" : "Play"}</StandardButton>
           </div>
-          <div className="standard-text-container">
-            <a
-              rel="noopener noreferrer"
-              target="_blank"
-              href="http://www.nickprovs.com"
-              className="standard-text standard-text-link"
+          <div style={{ marginTop: "10px" }}>
+            <StandardButton
+              title={running ? "Toggle Camera" : "Must be running to switch camera."}
+              disabled={!running}
+              onClick={this.handleToggleCamera.bind(this)}
             >
-              Nickprovs
-            </a>
+              Camera
+            </StandardButton>
           </div>
         </div>
       </div>
