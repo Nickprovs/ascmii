@@ -41,7 +41,7 @@ class App extends Component {
       <Theme variables={theme}>
         <BrowserRouter>
           <NavBar />
-          <div className="container">
+          <div className="content">
             {/* <div style={{ zIndex: "2" }} className="top-left-wrapper">
             <button onClick={this.handleToggleTheme.bind(this)}>Theme</button>
           </div> */}
