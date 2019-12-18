@@ -7,7 +7,7 @@
   font-family: "Lekton-Regular", monospace;
   height: 50px;
   width: 100%;
-  background-color: #4d4d4d;
+  background-color: var(--b2);
   position: relative;
 }
 
@@ -18,7 +18,7 @@
 .nav > .nav-header > .nav-title {
   display: inline-block;
   font-size: 22px;
-  color: #fff;
+  color: var(--f1);
   padding: 10px 10px 10px 10px;
 }
 
@@ -36,10 +36,15 @@
   display: inline-block;
   padding: 10px 10px 9px 10px;
   text-decoration: none;
-  color: #efefef;
+  color: var(--f1);
 }
 
-.nav > .nav-links > a:hover {
+.nav-item {
+  display: inline-block !important;
+}
+
+.nav > .nav-links > a:hover,
+.nav-item:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -62,20 +67,20 @@
   }
   .nav > .nav-btn > label:hover,
   .nav #nav-check:checked ~ .nav-btn > label {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--b3);
     cursor: pointer;
   }
   .nav > .nav-btn > label > span {
     display: block;
     width: 25px;
     height: 10px;
-    border-top: 2px solid #eee;
+    border-top: 2px solid var(--f1);
   }
   .nav > .nav-links {
     position: absolute;
     display: block;
     width: 100%;
-    background-color: #333;
+    background-color: var(--b3);
     height: 0px;
     transition: all 0.3s ease-in;
     overflow-y: hidden;

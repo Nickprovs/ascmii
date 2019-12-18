@@ -1,0 +1,19 @@
+.plainButton {
+  font-family: "Lekton-Regular", monospace;
+  background: none !important;
+  border: none;
+  padding: 0;
+  color: var(--f1);
+  cursor: pointer;
+}
+
+.plainButton-navBar {
+  padding: 10px;
+  font-size: 18px;
+  width: 100%;
+  text-align: left;
+}
+
+.plainButton:focus {
+  outline: 0;
+}

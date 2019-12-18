@@ -28,7 +28,6 @@ class CameraVisualizer extends Component {
     this.canvas = null;
     this.setCanvas = element => {
       this.canvas = element;
-      this.canvasContext = this.canvas.getContext("2d");
     };
 
     this.videoPlayer = null;
@@ -38,6 +37,7 @@ class CameraVisualizer extends Component {
   }
 
   async componentDidMount() {
+    this.canvasContext = this.canvas.getContext("2d");
     await this.init();
   }
 
