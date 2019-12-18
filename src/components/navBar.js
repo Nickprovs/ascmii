@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import PlainButton from "./common/plainButton";
 import "../styles/navBar.css";
 
@@ -14,7 +14,10 @@ class NavBar extends Component {
 
   handleNavBarClick() {
     this.setState({ isOpen: !this.state.isOpen });
-    console.log(this.state.isOpen);
+  }
+
+  handleTitleBarClick() {
+    if (this.state.isOpen) this.setState({ isOpen: false });
   }
 
   render() {
@@ -23,7 +26,14 @@ class NavBar extends Component {
       <div className="nav">
         <input type="checkbox" id="nav-check" onClick={this.handleNavBarClick.bind(this)} checked={this.state.isOpen} />
         <div className="nav-header">
-          <div className="nav-title">ascmii</div>
+          <Link
+            onClick={this.handleTitleBarClick.bind(this)}
+            to="/"
+            style={{ textDecoration: "none" }}
+            className="nav-title"
+          >
+            ascmii
+          </Link>
         </div>
         <div className="nav-btn">
           <label htmlFor="nav-check">
@@ -34,17 +44,15 @@ class NavBar extends Component {
         </div>
 
         <div className="nav-links" onClick={this.handleNavBarClick.bind(this)}>
-          <NavLink className="nav-item nav-link" to="/camera">
+          <NavLink activeStyle={{ fontWeight: "bold" }} className="nav-item nav-link" to="/camera">
             From Camera
           </NavLink>
-          <NavLink className="nav-item nav-link" to="/file">
+          <NavLink activeStyle={{ fontWeight: "bold" }} className="nav-item nav-link" to="/file">
             From File
           </NavLink>
-          <div style={{}} className="nav-item">
-            <PlainButton onClick={onThemeClick} className="plainButton-navBar">
-              Theme
-            </PlainButton>
-          </div>
+          <a style={{ cursor: "pointer" }} onClick={onThemeClick}>
+            Theme
+          </a>
         </div>
       </div>
     );
