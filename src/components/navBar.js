@@ -68,6 +68,9 @@ class NavBar extends Component {
           <NavLink activeStyle={{ fontWeight: "bold" }} className="nav-item nav-link" to="/file">
             From File
           </NavLink>
+          <a rel="noopener noreferrer" target="_blank" href="http://www.nickprovs.com">
+            Author
+          </a>
           <a style={{ cursor: "pointer" }} onClick={onThemeClick}>
             Theme
           </a>
