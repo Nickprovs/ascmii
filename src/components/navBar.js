@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { NavLink, Link } from "react-router-dom";
-import PlainButton from "./common/plainButton";
 import "../styles/navBar.css";
 
 class NavBar extends Component {

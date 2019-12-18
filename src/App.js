@@ -7,8 +7,6 @@ import FileVisualizer from "./components/fileVisualizer";
 import NotFound from "./components/notFound";
 import NavBar from "./components/navBar";
 import "./App.css";
-import StandardButton from "./components/common/standardButton";
-import PlainButton from "./components/common/plainButton";
 
 class App extends Component {
   state = {
@@ -43,7 +41,6 @@ class App extends Component {
 
   render() {
     const theme = this.state.darkModeOn ? Theme.Dark : Theme.Light;
-    const { navBarCollapsed } = this.state;
     return (
       <Theme variables={theme}>
         <BrowserRouter>
