@@ -47,8 +47,8 @@ class App extends Component {
           <NavBar onThemeClick={this.handleToggleTheme.bind(this)} />
           <div className="content">
             <Switch>
-              <Route path="/camera" component={CameraVisualizer} />
-              <Route path="/file" component={FileVisualizer} />
+              <Route path="/camera" render={props => <CameraVisualizer darkModeOn={this.state.darkModeOn} />} />
+              <Route path="/file" render={props => <FileVisualizer darkModeOn={this.state.darkModeOn} />} />
               <Route path="/not-found" component={NotFound} />
               <Redirect exact from="/" to="/camera" />
               <Redirect to="/not-found" />

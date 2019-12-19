@@ -103,6 +103,8 @@ class CameraVisualizer extends Component {
   }
 
   getNextFrame() {
+    const { darkModeOn } = this.props;
+
     const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
       this.canvas.width,
       this.canvas.height
@@ -112,7 +114,12 @@ class CameraVisualizer extends Component {
 
     const canvasContext = this.canvas.getContext("2d");
     const imageData = canvasContext.getImageData(0, 0, width, height);
-    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(imageData, this.contrast);
+    console.log(darkModeOn);
+    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
+      imageData,
+      this.contrast,
+      darkModeOn
+    );
 
     this.setState({ asciiText: formattedAscii });
   }

@@ -1,4 +1,5 @@
-const asciiCharacterPalette = " .,:;i1tfLCG08@".split("");
+const lightAsciiCharacterPalette = " .,:;i1tfLCG08@".split("");
+const darkAsciiCharacterPalette = "@80GCLft1i;:,. ".split("");
 
 export default class AsciiUtilities {
   static getRealisticDimensionForFittedAsciiText(width, height) {
@@ -18,8 +19,9 @@ export default class AsciiUtilities {
     return { width: width, height: height };
   }
 
-  static getFormattedAsciiCharactersFromCanvasImageData(canvasImageData, contrast = 128) {
+  static getFormattedAsciiCharactersFromCanvasImageData(canvasImageData, contrast = 128, useDarkPalette = false) {
     let ascii = "";
+    const asciiCharacterPalette = useDarkPalette ? darkAsciiCharacterPalette : lightAsciiCharacterPalette;
 
     for (let i = 0; i < canvasImageData.data.length; i += 4) {
       const r = canvasImageData.data[i];
@@ -30,7 +32,10 @@ export default class AsciiUtilities {
 
       const contrastedPixel = this.getContrastedPixelFromPixelAndContrast(unformattedPixel, contrast);
       const pixelBrightness = this.getPixelBrightnessFromPixel(contrastedPixel);
-      let nextAsciiCharacter = this.getAsciiCharacterFromPixelBrightness(pixelBrightness);
+      let nextAsciiCharacter = this.getAsciiCharacterFromPixelBrightnessAndPalette(
+        pixelBrightness,
+        asciiCharacterPalette
+      );
       const pixelIndex = Math.ceil((i + 1) / 4);
 
       if (this.reachedEndOfRow(pixelIndex, canvasImageData.width)) {
@@ -73,7 +78,7 @@ export default class AsciiUtilities {
     return (0.299 * pixel.red + 0.587 * pixel.green + 0.114 * pixel.blue) / 255;
   }
 
-  static getAsciiCharacterFromPixelBrightness(pixelBrightness) {
+  static getAsciiCharacterFromPixelBrightnessAndPalette(pixelBrightness, asciiCharacterPalette) {
     const paletteEndIndex = asciiCharacterPalette.length - 1;
     var nextCharacterIndexInPalette = paletteEndIndex - Math.round(pixelBrightness * paletteEndIndex);
     return asciiCharacterPalette[nextCharacterIndexInPalette];
