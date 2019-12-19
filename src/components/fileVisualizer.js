@@ -8,14 +8,18 @@ class FileVisualizer extends Component {
   constructor(props) {
     super(props);
 
+    this.supportedImageTypes = ["bmp", "jpg", "jpeg", "png", "gif"];
+    this.supportedVideoTypes = ["mp4"];
+
     this.canvas = null;
     this.setCanvas = element => {
       this.canvas = element;
     };
   }
 
-  handleSelectFile(file) {
+  renderImageFile(file) {
     const { darkModeOn } = this.props;
+
     var img = new Image();
     img.onload = e => {
       console.log("loaded");
@@ -32,6 +36,28 @@ class FileVisualizer extends Component {
       this.setState({ asciiText: formattedAscii });
     };
     img.src = URL.createObjectURL(file);
+  }
+
+  renderVideoFile(file) {
+    console.log("render video");
+  }
+
+  handleSelectFile(file) {
+    const fileType = file.name
+      .split(".")
+      .pop()
+      .toLowerCase();
+
+    const isImageFile = this.supportedImageTypes.includes(fileType);
+    const isVideoFile = this.supportedVideoTypes.includes(fileType);
+
+    if (!isImageFile && !isVideoFile) {
+      alert("This file type is not supported");
+      return;
+    }
+
+    if (isImageFile) this.renderImageFile(file);
+    if (isVideoFile) this.renderVideoFile(file);
   }
 
   render() {
