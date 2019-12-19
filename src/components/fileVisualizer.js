@@ -1,11 +1,31 @@
-import React from "react";
+import React, { Component } from "react";
+import FileVisualizerControls from "./fileVisualizerControls";
+class FileVisualizer extends Component {
+  state = { asciiText: "ascmii" };
 
-const FileVisualizer = () => {
-  return (
-    <div className="center-wrapper">
-      <h1>File Visualizer</h1>
-    </div>
-  );
-};
+  constructor(props) {
+    super(props);
+  }
+
+  handleSelectFile(selectedFile) {
+    console.log(selectedFile);
+  }
+
+  render() {
+    const { asciiText } = this.state;
+    return (
+      <div>
+        {/*ascii */}
+        <div className="center-wrapper">
+          <pre id="ascii">{asciiText}</pre>
+        </div>
+
+        <div className="bottom-right-wrapper">
+          <FileVisualizerControls onSelectFile={this.handleSelectFile.bind(this)} />
+        </div>
+      </div>
+    );
+  }
+}
 
 export default FileVisualizer;

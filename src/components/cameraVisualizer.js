@@ -12,7 +12,6 @@ class CameraVisualizer extends Component {
 
   constructor(props) {
     super(props);
-    this.characters = " .,:;i1tfLCG08@".split("");
     this.currentStream = null;
     this.contrast = 128;
     this.currentVideoInputId = "";
@@ -138,7 +137,7 @@ class CameraVisualizer extends Component {
     );
 
     return (
-      <div className="rootDiv">
+      <div>
         {/*Video: Hidden */}
         <div className="center-wrapper">
           {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
