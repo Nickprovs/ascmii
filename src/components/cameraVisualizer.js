@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import WebRtcUtilities from "../util/webRtcUtilities";
 import AsciiUtilities from "../util/asciiUtilities";
-import StandardButton from "../components/common/standardButton";
+import CameraVisualizerControls from "./cameraVisualizerControls";
 
 class CameraVisualizer extends Component {
   state = {
@@ -156,28 +156,13 @@ class CameraVisualizer extends Component {
           <pre id="ascii">{asciiText}</pre>
         </div>
 
-        <div
-          style={{
-            padding: "4px",
-            borderStyle: "solid",
-            borderColor: "var(--f1)",
-            borderWidth: "0.75px",
-            borderRadius: "4px"
-          }}
-          className="bottom-right-wrapper"
-        >
-          <div>
-            <StandardButton onClick={this.handleTogglePlay.bind(this)}>{playing ? "Pause" : "Play"}</StandardButton>
-          </div>
-          <div style={{ marginTop: "10px" }}>
-            <StandardButton
-              title={running ? "Toggle Camera" : "Must be running to switch camera."}
-              disabled={!running}
-              onClick={this.handleToggleCamera.bind(this)}
-            >
-              Camera
-            </StandardButton>
-          </div>
+        <div className="bottom-right-wrapper">
+          <CameraVisualizerControls
+            playing={playing}
+            running={running}
+            onToggleCamera={this.handleToggleCamera.bind(this)}
+            onTogglePlay={this.handleTogglePlay.bind(this)}
+          />
         </div>
       </div>
     );
