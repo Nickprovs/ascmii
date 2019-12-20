@@ -87,8 +87,14 @@ class FileVisualizer extends Component {
       return;
     }
 
+    this.cleanUpPreviousResources();
+
     if (isImageFile) this.renderImageFile(file);
     if (isVideoFile) this.renderVideoFile(file);
+  }
+
+  cleanUpPreviousResources() {
+    if (this.frameTimer) clearInterval(this.frameTimer);
   }
 
   render() {
