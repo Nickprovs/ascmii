@@ -15,6 +15,11 @@ class FileVisualizer extends Component {
     this.setCanvas = element => {
       this.canvas = element;
     };
+
+    this.videoPlayer = null;
+    this.setVideoPlayer = element => {
+      this.videoPlayer = element;
+    };
   }
 
   renderImageFile(file) {
@@ -40,6 +45,32 @@ class FileVisualizer extends Component {
 
   renderVideoFile(file) {
     console.log("render video");
+
+    this.videoPlayer.src = URL.createObjectURL(file);
+    this.videoPlayer.play();
+    this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
+  }
+
+  getNextFrame() {
+    const { darkModeOn } = this.props;
+
+    const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
+      this.canvas.width,
+      this.canvas.height
+    );
+
+    this.canvas.getContext("2d").drawImage(this.videoPlayer, 0, 0, width, height);
+
+    const canvasContext = this.canvas.getContext("2d");
+    const imageData = canvasContext.getImageData(0, 0, width, height);
+    console.log(darkModeOn);
+    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
+      imageData,
+      this.contrast,
+      darkModeOn
+    );
+
+    this.setState({ asciiText: formattedAscii });
   }
 
   handleSelectFile(file) {
@@ -64,6 +95,12 @@ class FileVisualizer extends Component {
     const { asciiText } = this.state;
     return (
       <div>
+        <div className="center-wrapper">
+          {/*  */}
+          {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
+          <video style={{ opacity: 0 }} ref={this.setVideoPlayer} autoPlay playsInline />
+        </div>
+
         {/*Canas: Hidden */}
         <div className="center-wrapper">
           {/* style={{ opacity: 0 }}  */}
