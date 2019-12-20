@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import FileVisualizerControls from "./fileVisualizerControls";
+import FileVisualizerControls from "./basicFileVisualizerControls";
 import AsciiUtilities from "../util/asciiUtilities";
 
 class FileVisualizer extends Component {
@@ -22,55 +22,9 @@ class FileVisualizer extends Component {
     };
   }
 
-  renderImageFile(file) {
-    const { darkModeOn } = this.props;
-
-    var img = new Image();
-    img.onload = e => {
-      console.log("loaded");
-      const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(img.width, img.height);
-      console.log(width, height);
-      this.canvas.width = width;
-      this.canvas.height = height;
-      let ctx = this.canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-
-      const imageData = ctx.getImageData(0, 0, width, height);
-      const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(imageData, 128, darkModeOn);
-
-      this.setState({ asciiText: formattedAscii });
-    };
-    img.src = URL.createObjectURL(file);
-  }
-
-  renderVideoFile(file) {
-    console.log("render video");
-
-    this.videoPlayer.src = URL.createObjectURL(file);
-    this.videoPlayer.play();
-    this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / 30);
-  }
-
-  getNextFrame() {
-    const { darkModeOn } = this.props;
-
-    const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
-      this.canvas.width,
-      this.canvas.height
-    );
-
-    this.canvas.getContext("2d").drawImage(this.videoPlayer, 0, 0, width, height);
-
-    const canvasContext = this.canvas.getContext("2d");
-    const imageData = canvasContext.getImageData(0, 0, width, height);
-    console.log(darkModeOn);
-    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
-      imageData,
-      this.contrast,
-      darkModeOn
-    );
-
-    this.setState({ asciiText: formattedAscii });
+  componentWillUnmount() {
+    console.log("willunmount");
+    this.cleanUpPreviousResources();
   }
 
   handleSelectFile(file) {
@@ -93,23 +47,97 @@ class FileVisualizer extends Component {
     if (isVideoFile) this.renderVideoFile(file);
   }
 
+  renderImageFile(file) {
+    const { darkModeOn } = this.props;
+
+    var img = new Image();
+    img.onload = e => {
+      const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(img.width, img.height);
+      this.canvas.width = width;
+      this.canvas.height = height;
+      let ctx = this.canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(imageData, 128, darkModeOn);
+
+      this.setState({ asciiText: formattedAscii });
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
+  renderVideoFile(file) {
+    this.setVideoFileUrl(file);
+    this.setVideoDimensions();
+    this.playVideo();
+  }
+
   cleanUpPreviousResources() {
+    this.cleanUpVideoResources();
+  }
+
+  cleanUpVideoResources() {
+    if (this.videoFileUrl) URL.revokeObjectURL(this.videoFileUrl);
+    this.stopVideo();
+  }
+
+  setVideoFileUrl(file) {
+    this.videoFileUrl = URL.createObjectURL(file);
+    this.videoPlayer.src = this.videoFileUrl;
+  }
+
+  setVideoDimensions() {
+    const { width: fittedWidth, height: fittedHeight } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
+      this.videoPlayer.width,
+      this.videoPlayer.height
+    );
+
+    this.videoPlayer.width = fittedWidth;
+    this.videoPlayer.height = fittedHeight;
+  }
+
+  playVideo() {
+    this.videoPlayer.play();
+    this.frameTimer = setInterval(this.getNextVideoFrame.bind(this), 1000 / 30);
+  }
+
+  stopVideo() {
+    this.videoPlayer.pause();
     if (this.frameTimer) clearInterval(this.frameTimer);
+  }
+
+  getNextVideoFrame() {
+    const { darkModeOn } = this.props;
+    const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
+      this.canvas.width,
+      this.canvas.height
+    );
+
+    this.canvas.getContext("2d").drawImage(this.videoPlayer, 0, 0, width, height);
+
+    const canvasContext = this.canvas.getContext("2d");
+    const imageData = canvasContext.getImageData(0, 0, width, height);
+    const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
+      imageData,
+      this.contrast,
+      darkModeOn
+    );
+
+    this.setState({ asciiText: formattedAscii });
   }
 
   render() {
     const { asciiText } = this.state;
     return (
       <div>
+        {/* Video: Hidden */}
         <div className="center-wrapper">
-          {/*  */}
-          {/*Opacity set to 0 to support safari browsers. Hiding other ways won't work*/}
-          <video style={{ opacity: 0 }} ref={this.setVideoPlayer} autoPlay playsInline />
+          {/* Initial width/height overwridden when file selected  */}
+          <video style={{ opacity: 0 }} width="320" height="180" ref={this.setVideoPlayer} autoPlay playsInline />
         </div>
 
         {/*Canas: Hidden */}
         <div className="center-wrapper">
-          {/* style={{ opacity: 0 }}  */}
           <canvas style={{ opacity: 0 }} ref={this.setCanvas} width="200" height="200" />
         </div>
 
