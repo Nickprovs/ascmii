@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import FileVisualizerControls from "./basicFileVisualizerControls";
+import BasicFileVisualizerControls from "./basicFileVisualizerControls";
+import VideoFileVisualizaerControls from "./videoFileVisualizerControls";
 import AsciiUtilities from "../util/asciiUtilities";
 
 class FileVisualizer extends Component {
-  state = { asciiText: "ascmii" };
+  state = { asciiText: "ascmii", videoMode: false, isVideoPlaying: false };
 
   constructor(props) {
     super(props);
@@ -43,8 +44,14 @@ class FileVisualizer extends Component {
 
     this.cleanUpPreviousResources();
 
-    if (isImageFile) this.renderImageFile(file);
-    if (isVideoFile) this.renderVideoFile(file);
+    if (isImageFile) {
+      this.setState({ videoMode: false });
+      this.renderImageFile(file);
+    }
+    if (isVideoFile) {
+      this.setState({ videoMode: true });
+      this.renderVideoFile(file);
+    }
   }
 
   renderImageFile(file) {
@@ -96,12 +103,22 @@ class FileVisualizer extends Component {
     this.videoPlayer.height = fittedHeight;
   }
 
+  handleTogglePlay() {
+    const { isVideoPlaying } = this.state;
+
+    if (isVideoPlaying) this.stopVideo();
+    else this.playVideo();
+
+    console.log("state", isVideoPlaying);
+  }
+
   playVideo() {
     this.videoPlayer.play();
     this.frameTimer = setInterval(this.getNextVideoFrame.bind(this), 1000 / 30);
   }
 
   stopVideo() {
+    console.log("stopping video");
     this.videoPlayer.pause();
     if (this.frameTimer) clearInterval(this.frameTimer);
   }
@@ -126,14 +143,35 @@ class FileVisualizer extends Component {
     this.setState({ asciiText: formattedAscii });
   }
 
+  onVideoPlayed() {
+    console.log("played event");
+
+    this.setState({ isVideoPlaying: true });
+  }
+
+  onVideoStopped() {
+    this.setState({ isVideoPlaying: false });
+  }
+
   render() {
-    const { asciiText } = this.state;
+    const { asciiText, videoMode, isVideoPlaying } = this.state;
+
     return (
       <div>
         {/* Video: Hidden */}
         <div className="center-wrapper">
           {/* Initial width/height overwridden when file selected  */}
-          <video style={{ opacity: 0 }} width="320" height="180" ref={this.setVideoPlayer} autoPlay playsInline />
+          <video
+            onPlay={this.onVideoPlayed.bind(this)}
+            onEnded={this.onVideoStopped.bind(this)}
+            onPause={this.onVideoStopped.bind(this)}
+            style={{ opacity: 0 }}
+            width="320"
+            height="180"
+            ref={this.setVideoPlayer}
+            autoPlay
+            playsInline
+          />
         </div>
 
         {/*Canas: Hidden */}
@@ -147,7 +185,14 @@ class FileVisualizer extends Component {
         </div>
 
         <div className="bottom-right-wrapper">
-          <FileVisualizerControls onSelectFile={this.handleSelectFile.bind(this)} />
+          {!videoMode && <BasicFileVisualizerControls onSelectFile={this.handleSelectFile.bind(this)} />}
+          {videoMode && (
+            <VideoFileVisualizaerControls
+              onSelectFile={this.handleSelectFile.bind(this)}
+              onTogglePlay={this.handleTogglePlay.bind(this)}
+              isVideoPlaying={isVideoPlaying}
+            />
+          )}
         </div>
       </div>
     );

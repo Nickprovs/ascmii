@@ -3,13 +3,12 @@ import StandardButton from "./common/standardButton";
 import "../styles/visualizerControls.css";
 import FileInputButton from "./common/fileInputButton";
 
-const FileVisualizerControls = ({ onSelectFile }) => {
+const BasicFileVisualizerControls = ({ onSelectFile }) => {
   return (
     <div className="visualizerControls">
       <FileInputButton onSelectFile={onSelectFile}>File</FileInputButton>
-      {/* <div style={{ marginTop: "10px" }}></div> */}
     </div>
   );
 };
 
-export default FileVisualizerControls;
+export default BasicFileVisualizerControls;
