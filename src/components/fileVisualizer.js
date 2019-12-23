@@ -108,8 +108,6 @@ class FileVisualizer extends Component {
 
     if (isVideoPlaying) this.stopVideo();
     else this.playVideo();
-
-    console.log("state", isVideoPlaying);
   }
 
   playVideo() {
@@ -118,7 +116,6 @@ class FileVisualizer extends Component {
   }
 
   stopVideo() {
-    console.log("stopping video");
     this.videoPlayer.pause();
     if (this.frameTimer) clearInterval(this.frameTimer);
   }
@@ -144,8 +141,6 @@ class FileVisualizer extends Component {
   }
 
   onVideoPlayed() {
-    console.log("played event");
-
     this.setState({ isVideoPlaying: true });
   }
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import StandardButton from "../components/common/standardButton";
 import "../styles/visualizerControls.css";
 

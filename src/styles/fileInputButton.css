@@ -19,6 +19,3 @@
 .custom-file-input:hover::before {
   border-color: black;
 }
-.custom-file-input:active::before {
-  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
-}

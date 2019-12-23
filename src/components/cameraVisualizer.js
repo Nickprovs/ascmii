@@ -114,7 +114,6 @@ class CameraVisualizer extends Component {
 
     const canvasContext = this.canvas.getContext("2d");
     const imageData = canvasContext.getImageData(0, 0, width, height);
-    console.log(darkModeOn);
     const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
       imageData,
       this.contrast,

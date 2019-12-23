@@ -23,7 +23,7 @@ class FileInputButton extends Component {
   }
 
   render() {
-    const { onSelectFile, children } = this.props;
+    const { children } = this.props;
     return (
       <div>
         <input
