@@ -3,6 +3,7 @@
 }
 
 .content {
+  overflow: hidden;
   background-color: var(--b1);
   position: absolute;
   width: 100%;

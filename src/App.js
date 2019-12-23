@@ -55,8 +55,6 @@ class App extends Component {
             </Switch>
           </div>
         </BrowserRouter>
-
-        {/* <CameraVisualizer style={{ zIndex: "1" }} /> */}
       </Theme>
     );
   }
