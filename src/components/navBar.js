@@ -42,7 +42,12 @@ class NavBar extends Component {
     const { onThemeClick } = this.props;
     return (
       <div ref={this.setNavBarRef} className="nav">
-        <input type="checkbox" id="nav-check" onClick={this.handleNavBarClick.bind(this)} checked={this.state.isOpen} />
+        <input
+          type="checkbox"
+          id="nav-check"
+          onChange={this.handleNavBarClick.bind(this)}
+          checked={this.state.isOpen}
+        />
         <div className="nav-header">
           <Link
             onClick={this.handleTitleBarClick.bind(this)}
