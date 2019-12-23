@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "../../styles/fileInputButton.css";
 
 class FileInputButton extends Component {
   state = {};
