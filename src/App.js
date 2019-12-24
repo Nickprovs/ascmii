@@ -6,6 +6,7 @@ import CameraVisualizer from "./components/cameraVisualizer";
 import FileVisualizer from "./components/fileVisualizer";
 import NotFound from "./components/notFound";
 import NavBar from "./components/navBar";
+import Issue from "./components/issue";
 import "./App.css";
 
 class App extends Component {
@@ -35,10 +36,6 @@ class App extends Component {
     this.setState({ navBarCollapsed: !this.state.navBarCollapsed });
   }
 
-  handleStandardOnClick() {
-    console.log("hey");
-  }
-
   render() {
     const theme = this.state.darkModeOn ? Theme.Dark : Theme.Light;
     return (
@@ -49,6 +46,7 @@ class App extends Component {
             <Switch>
               <Route path="/camera" render={props => <CameraVisualizer darkModeOn={this.state.darkModeOn} />} />
               <Route path="/file" render={props => <FileVisualizer darkModeOn={this.state.darkModeOn} />} />
+              <Route path="/issue" component={Issue} />
               <Route path="/not-found" component={NotFound} />
               <Redirect exact from="/" to="/camera" />
               <Redirect to="/not-found" />

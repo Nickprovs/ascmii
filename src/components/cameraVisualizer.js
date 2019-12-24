@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import WebRtcUtilities from "../util/webRtcUtilities";
 import AsciiUtilities from "../util/asciiUtilities";
 import CameraVisualizerControls from "./cameraVisualizerControls";
+import { withRouter } from "react-router-dom";
 
 class CameraVisualizer extends Component {
   state = {
@@ -37,6 +38,8 @@ class CameraVisualizer extends Component {
   }
 
   async componentDidMount() {
+    console.log(this.props);
+
     this.canvasContext = this.canvas.getContext("2d");
     await this.init();
   }
@@ -54,7 +57,7 @@ class CameraVisualizer extends Component {
       const nextDeviceId = await WebRtcUtilities.getNextVideoInputIdAsync(this.currentVideoInputId);
       this.currentVideoInputId = nextDeviceId;
     } catch (ex) {
-      console.log(ex);
+      console.log(this.context);
     }
   }
 
@@ -76,7 +79,7 @@ class CameraVisualizer extends Component {
       this.setState({ playing: true });
       this.setState({ running: true });
     } catch (ex) {
-      console.log(ex);
+      this.props.history.push({ pathname: "/issue", state: { issue: "No camera available." } });
     }
   }
 
@@ -174,4 +177,4 @@ class CameraVisualizer extends Component {
   }
 }
 
-export default CameraVisualizer;
+export default withRouter(CameraVisualizer);
