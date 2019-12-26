@@ -37,6 +37,7 @@
 
 .standard-text {
   color: var(--f1);
+  font-family: "Lekton-Regular", monospace;
 }
 
 .standard-text-link {

@@ -1,10 +1,12 @@
 import React from "react";
 
 const Issue = ({ history }) => {
-  const issue = history.location.state.issue ? history.location.state.issue : "Issue";
+  let issue = "Issue";
+  if (history.location.state && history.location.state.issue) issue = history.location.state.issue;
+
   return (
     <div className="center-wrapper">
-      <h1>{issue}</h1>
+      <h1 className="standard-text">{issue}</h1>
     </div>
   );
 };
