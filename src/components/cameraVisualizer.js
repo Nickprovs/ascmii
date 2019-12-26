@@ -38,8 +38,7 @@ class CameraVisualizer extends Component {
   }
 
   async componentDidMount() {
-    console.log(this.props);
-
+    this.checkForSupportIssues();
     this.canvasContext = this.canvas.getContext("2d");
     await this.init();
   }
@@ -66,6 +65,7 @@ class CameraVisualizer extends Component {
       if (this.state.playing) await this.stop();
 
       this.constraints.video.deviceId = { exact: this.currentVideoInputId };
+
       this.currentStream = await navigator.mediaDevices.getUserMedia(this.constraints);
       if (
         this.getCanvasRequiresFlip(this.canvasFlipped, this.currentStream.getVideoTracks()[0].getSettings().facingMode)
@@ -88,6 +88,11 @@ class CameraVisualizer extends Component {
     if (this.frameTimer) clearInterval(this.frameTimer);
     WebRtcUtilities.stopStreamedVideo(this.videoPlayer);
     this.setState({ playing: false });
+  }
+
+  checkForSupportIssues() {
+    if (!navigator.mediaDevices.getUserMedia)
+      this.props.history.push({ pathname: "/issue", state: { issue: "This browser is not supported." } });
   }
 
   getCanvasRequiresFlip(canvasAlreadyFlipped, webRtcCameraFacingMode) {
