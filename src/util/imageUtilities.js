@@ -1,6 +1,3 @@
-import { reject } from "q";
-import { resolve } from "dns";
-
 export default class ImageUtilities {
   static async getOrientationAsync(file) {
     let reader = new FileReader();
