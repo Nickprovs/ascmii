@@ -67,7 +67,11 @@ class FileVisualizer extends Component {
       try {
         srcOrientation = await ImageUtilities.getOrientationAsync(file);
       } catch (ex) {
-        console.log(ex);
+        this.props.history.push({
+          pathname: "/issue",
+          state: { issue: "Something went wrong when inspecting image orientation." }
+        });
+        return;
       }
 
       //Our canvas dimensions will need to be inverted for certain image orientations

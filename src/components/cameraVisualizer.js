@@ -90,6 +90,7 @@ class CameraVisualizer extends Component {
       this.setState({ running: true });
     } catch (ex) {
       this.props.history.push({ pathname: "/issue", state: { issue: "No camera available." } });
+      return;
     }
   }
 
