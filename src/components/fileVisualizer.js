@@ -11,7 +11,7 @@ class FileVisualizer extends Component {
     super(props);
 
     this.supportedImageTypes = ["bmp", "jpg", "jpeg", "png", "gif"];
-    this.supportedVideoTypes = ["mp4"];
+    this.supportedVideoTypes = ["mp4", "webm"];
 
     this.getNextVideoFrame = this.getNextVideoFrame.bind(this);
 
@@ -40,7 +40,12 @@ class FileVisualizer extends Component {
     const isVideoFile = this.supportedVideoTypes.includes(fileType);
 
     if (!isImageFile && !isVideoFile) {
-      alert("This file type is not supported");
+      alert(
+        "This file type is not supported.\n" +
+          `Supported Video: ${this.supportedVideoTypes.join(", ")}\n` +
+          `Supported Image: ${this.supportedImageTypes.join(", ")}`
+      );
+
       return;
     }
 
