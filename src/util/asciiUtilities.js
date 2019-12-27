@@ -51,7 +51,8 @@ export default class AsciiUtilities {
   }
 
   static reachedEndOfRow(pixelIndex, rowWidth) {
-    return pixelIndex !== 0 && pixelIndex % rowWidth === 0;
+    const endOfRow = pixelIndex !== 0 && pixelIndex % rowWidth === 0;
+    return endOfRow;
   }
 
   static reachedLineSkipIndex(pixelIndex, rowWidth) {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import BasicFileVisualizerControls from "./basicFileVisualizerControls";
 import VideoFileVisualizaerControls from "./videoFileVisualizerControls";
 import AsciiUtilities from "../util/asciiUtilities";
+import ImageUtilities from "../util/imageUtilities";
 
 class FileVisualizer extends Component {
   state = { asciiText: "ascmii", videoMode: false, isVideoPlaying: false };
@@ -26,11 +27,10 @@ class FileVisualizer extends Component {
   }
 
   componentWillUnmount() {
-    console.log("willunmount");
     this.cleanUpPreviousResources();
   }
 
-  handleSelectFile(file) {
+  async handleSelectFile(file) {
     const fileType = file.name
       .split(".")
       .pop()
@@ -56,15 +56,57 @@ class FileVisualizer extends Component {
     }
   }
 
-  renderImageFile(file) {
+  async renderImageFile(file) {
     const { darkModeOn } = this.props;
 
     var img = new Image();
-    img.onload = e => {
-      const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(img.width, img.height);
+    img.onload = async e => {
+      let { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(img.width, img.height);
+
+      let srcOrientation = -1;
+      try {
+        srcOrientation = await ImageUtilities.getOrientationAsync(file);
+      } catch (ex) {
+        console.log(ex);
+      }
+
+      //Our canvas dimensions will need to be inverted for certain image orientations
+      if (4 < srcOrientation && srcOrientation < 9) {
+        let tempWidth = height;
+        width = height;
+        height = tempWidth;
+      }
+
       this.canvas.width = width;
       this.canvas.height = height;
       let ctx = this.canvas.getContext("2d");
+
+      //Transform the canvas based on the image orientation
+      switch (srcOrientation) {
+        case 2:
+          ctx.transform(-1, 0, 0, 1, width, 0);
+          break;
+        case 3:
+          ctx.transform(-1, 0, 0, -1, width, height);
+          break;
+        case 4:
+          ctx.transform(1, 0, 0, -1, 0, height);
+          break;
+        case 5:
+          ctx.transform(0, 1, 1, 0, 0, 0);
+          break;
+        case 6:
+          ctx.transform(0, 1, -1, 0, height, 0);
+          break;
+        case 7:
+          ctx.transform(0, -1, -1, 0, height, width);
+          break;
+        case 8:
+          ctx.transform(0, -1, 1, 0, 0, width);
+          break;
+        default:
+          break;
+      }
       ctx.drawImage(img, 0, 0, width, height);
 
       const imageData = ctx.getImageData(0, 0, width, height);
@@ -78,6 +120,7 @@ class FileVisualizer extends Component {
   renderVideoFile(file) {
     this.setVideoFileUrl(file);
     this.setVideoDimensions();
+    this.canvas.getContext("2d").resetTransform();
     this.playVideo();
   }
 
@@ -132,9 +175,9 @@ class FileVisualizer extends Component {
       this.canvas.height
     );
 
-    this.canvas.getContext("2d").drawImage(this.videoPlayer, 0, 0, width, height);
+    let canvasContext = this.canvas.getContext("2d");
+    canvasContext.drawImage(this.videoPlayer, 0, 0, width, height);
 
-    const canvasContext = this.canvas.getContext("2d");
     const imageData = canvasContext.getImageData(0, 0, width, height);
     const formattedAscii = AsciiUtilities.getFormattedAsciiCharactersFromCanvasImageData(
       imageData,
