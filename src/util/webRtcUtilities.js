@@ -1,10 +1,4 @@
 export default class WebRtcUtilities {
-  /**
-   * Gets the next video input based on the current video input id.
-   * @access public
-   * @param {string} currentVideoInputId The current video input id. May provide undefined value if no current exists.
-   * @return {string} The next video input via index based on the current video input... or the video input at index 0 if none provided.
-   */
   static async getNextVideoInputIdAsync(currentVideoInputId) {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoDevices = devices.filter(d => d.kind === "videoinput");
