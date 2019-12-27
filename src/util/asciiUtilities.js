@@ -4,7 +4,7 @@ const darkAsciiCharacterPalette = "@80GCLft1i;:,. ".split("");
 export default class AsciiUtilities {
   static getRealisticDimensionForFittedAsciiText(width, height) {
     const MAXIMUM_WIDTH = 187.5;
-    const MAXIMUM_HEIGHT = MAXIMUM_WIDTH * (height / width);
+    const MAXIMUM_HEIGHT = 140;
 
     if (height > MAXIMUM_HEIGHT) {
       const reducedWidth = Math.floor((width * MAXIMUM_HEIGHT) / height);
