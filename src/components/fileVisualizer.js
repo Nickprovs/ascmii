@@ -41,7 +41,7 @@ class FileVisualizer extends Component {
 
     if (!isImageFile && !isVideoFile) {
       alert(
-        "This file type is not supported.\n" +
+        `The ${fileType} file type is not supported.\n` +
           `Supported Video: ${this.supportedVideoTypes.join(", ")}\n` +
           `Supported Image: ${this.supportedImageTypes.join(", ")}`
       );
