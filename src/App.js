@@ -12,7 +12,8 @@ import "./App.css";
 class App extends Component {
   state = {
     darkModeOn: false,
-    navBarCollapsed: true
+    navBarCollapsed: true,
+    userAcceptedFlickerConfirmation: false
   };
 
   constructor(props) {
@@ -36,15 +37,29 @@ class App extends Component {
     this.setState({ navBarCollapsed: !this.state.navBarCollapsed });
   }
 
+  handleFlickerConfirmation() {
+    this.setState({ userAcceptedFlickerConfirmation: true });
+  }
+
   render() {
     const theme = this.state.darkModeOn ? Theme.Dark : Theme.Light;
+    const { darkModeOn, userAcceptedFlickerConfirmation } = this.state;
     return (
       <Theme variables={theme}>
         <BrowserRouter>
           <NavBar onThemeClick={this.handleToggleTheme.bind(this)} />
           <div className="content">
             <Switch>
-              <Route path="/camera" render={props => <CameraVisualizer darkModeOn={this.state.darkModeOn} />} />
+              <Route
+                path="/camera"
+                render={props => (
+                  <CameraVisualizer
+                    onUserAcceptedFlickerConfirmation={this.handleFlickerConfirmation.bind(this)}
+                    userAcceptedFlickerConfirmation={userAcceptedFlickerConfirmation}
+                    darkModeOn={darkModeOn}
+                  />
+                )}
+              />
               <Route path="/file" render={props => <FileVisualizer darkModeOn={this.state.darkModeOn} />} />
               <Route path="/issue" component={Issue} />
               <Route path="/not-found" component={NotFound} />

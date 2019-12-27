@@ -61,6 +61,14 @@ class CameraVisualizer extends Component {
   }
 
   async play() {
+    if (!this.props.userAcceptedFlickerConfirmation) {
+      let userAgreesToProceed = window.confirm(
+        "Some cameras can produce a flickering / strobe effect which may be unsuitable for some users. Proceed?"
+      );
+      if (!userAgreesToProceed) return;
+      else this.props.onUserAcceptedFlickerConfirmation();
+    }
+
     try {
       if (this.state.playing) await this.stop();
 
