@@ -1,6 +1,6 @@
 {
   "short_name": "ascmii",
-  "name": "An ascii visualizer",
+  "name": "ascii art visualizer",
   "icons": [
     {
       "src": "favicon.ico",
