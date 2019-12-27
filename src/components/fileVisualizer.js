@@ -124,7 +124,10 @@ class FileVisualizer extends Component {
   renderVideoFile(file) {
     this.setVideoFileUrl(file);
     this.setVideoDimensions();
-    this.canvas.getContext("2d").resetTransform();
+
+    //Reset canvas
+    this.canvas.getContext("2d").setTransform(1, 0, 0, 1, 0, 0);
+
     this.playVideo();
   }
 
@@ -209,10 +212,10 @@ class FileVisualizer extends Component {
         <div className="center-wrapper">
           {/* Initial width/height overwridden when file selected  */}
           <video
+            style={{ opacity: 0 }}
             onPlay={this.onVideoPlayed.bind(this)}
             onEnded={this.onVideoStopped.bind(this)}
             onPause={this.onVideoStopped.bind(this)}
-            style={{ opacity: 0 }}
             width="320"
             height="180"
             ref={this.setVideoPlayer}
