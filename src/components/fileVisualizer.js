@@ -12,6 +12,8 @@ class FileVisualizer extends Component {
     this.supportedImageTypes = ["bmp", "jpg", "jpeg", "png", "gif"];
     this.supportedVideoTypes = ["mp4"];
 
+    this.getNextVideoFrame = this.getNextVideoFrame.bind(this);
+
     this.canvas = null;
     this.setCanvas = element => {
       this.canvas = element;
@@ -112,7 +114,7 @@ class FileVisualizer extends Component {
 
   playVideo() {
     this.videoPlayer.play();
-    this.frameTimer = setInterval(this.getNextVideoFrame.bind(this), 1000 / 30);
+    this.frameTimer = setInterval(this.getNextVideoFrame, 1000 / 30);
   }
 
   stopVideo() {
@@ -121,6 +123,9 @@ class FileVisualizer extends Component {
   }
 
   getNextVideoFrame() {
+    //If we unmounted whilst right before this function call...
+    if (this.canvas == null) return;
+
     const { darkModeOn } = this.props;
     const { width, height } = AsciiUtilities.getRealisticDimensionForFittedAsciiText(
       this.canvas.width,

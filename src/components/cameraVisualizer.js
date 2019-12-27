@@ -26,6 +26,8 @@ class CameraVisualizer extends Component {
       frameRate: { ideal: 30, max: 60 }
     };
 
+    this.getNextFrame = this.getNextFrame.bind(this);
+
     this.canvas = null;
     this.setCanvas = element => {
       this.canvas = element;
@@ -83,7 +85,7 @@ class CameraVisualizer extends Component {
       this.videoPlayer.srcObject = this.currentStream;
 
       const frameRate = WebRtcUtilities.getFrameRateForMediaStream(this.currentStream);
-      this.frameTimer = setInterval(this.getNextFrame.bind(this), 1000 / frameRate);
+      this.frameTimer = setInterval(this.getNextFrame, 1000 / frameRate);
       this.setState({ playing: true });
       this.setState({ running: true });
     } catch (ex) {
