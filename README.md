@@ -40,14 +40,14 @@
 
 ## About The Project
 
-ascmii leverages WebRTC for input media interaction and common image processing algorithms to convert images into a corresponding ascii matrix.
+ascmii leverages WebRTC for input media interaction and common image processing algorithms to convert images into a corresponding ASCII matrix.
 In addition to cameras, it all supports certain image and video files. A user can also toggle the theme (light/dark).
 
 [![Product Name Screen Shot][product-screenshot]](/_meta/sample.jpg)
 
 ### Built With
 
-- react
+- react.js
 - WebRTC
 
 <!-- GETTING STARTED -->
@@ -57,7 +57,7 @@ In addition to cameras, it all supports certain image and video files. A user ca
 1. Clone or Fork the project
 
 ```sh
-git clone https://github.com/nickprovs/ballpit.git
+git clone https://github.com/Nickprovs/ascmii.git
 ```
 
 2. Install Dependencies
@@ -67,6 +67,7 @@ npm update
 ```
 
 3. Start on localhost
+
 ```sh
 npm start
 ```
