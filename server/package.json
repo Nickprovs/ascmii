@@ -1,0 +1,13 @@
+{
+  "author": "Nick Provost",
+  "name": "ascmii",
+  "description": "The server for hosting ascmii.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "~4.16.0"
+  }
+}

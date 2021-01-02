@@ -1,0 +1,15 @@
+# Deployment
+
+Running NPM Build on the client will also copy its build contents to server/public
+Once that's done - and the below code is placed in an app.yaml file in the root of the server project
+You can run gcloud app deploy
+
+Google Cloud: To deploy this app to the google cloud, you must include an app.yaml file in the same directory.
+It's format should look like this:
+runtime: nodejs10
+handlers:
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
+
