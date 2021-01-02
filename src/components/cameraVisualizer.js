@@ -42,15 +42,10 @@ class CameraVisualizer extends Component {
   async componentDidMount() {
     this.checkForSupportIssues();
     this.canvasContext = this.canvas.getContext("2d");
-    await this.init();
   }
 
   componentWillUnmount() {
     this.stop();
-  }
-
-  async init() {
-    await this.setNextVideoInputId();
   }
 
   async setNextVideoInputId() {
@@ -72,6 +67,12 @@ class CameraVisualizer extends Component {
     }
 
     try {
+      if(!this.currentVideoInputId) {
+        //Chrome 81+ fix for device permissions
+        let tempStreamToRequestPermission = await navigator.mediaDevices.getUserMedia({ video: true });
+        await this.setNextVideoInputId();
+        tempStreamToRequestPermission.getTracks().forEach(track => track.stop());
+      }
       if (this.state.playing) await this.stop();
 
       this.constraints.video.deviceId = { exact: this.currentVideoInputId };

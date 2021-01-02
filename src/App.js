@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-import Theme from "./components/common/theme";
+import Theme from "./components/common/Theme";
 import Theming from "./lib/theming";
 import CameraVisualizer from "./components/cameraVisualizer";
 import FileVisualizer from "./components/fileVisualizer";
