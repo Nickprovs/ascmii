@@ -60,13 +60,18 @@ In addition to cameras, it all supports certain image and video files. A user ca
 git clone https://github.com/Nickprovs/ascmii.git
 ```
 
-2. Install Dependencies
+2. Navigate to client code
+```sh
+cd client
+```
+
+3. Install Dependencies
 
 ```sh
 npm update
 ```
 
-3. Start on localhost
+4. Start on localhost
 
 ```sh
 npm start
