@@ -1,4 +1,5 @@
 let express = require("express"); 
+let path = require("path");
 
 const app = express();
 app.use(express.static(__dirname + "/public"));
